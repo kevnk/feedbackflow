@@ -31,3 +31,7 @@
 	- [x] Move MCP files to a separate mcp directory
 	- [x] Move scripts to a separate scripts directory
 - [x] In all the cli prompts can you make them (Y/n) instead (defaulting to y)?
+
+# BUGS
+- [ ] Running `ff` command in the terminal doesn't work when outside of this project even though you can run the setup.py script.
+- [ ] Run tasks is not available outside of this project (e.g when working on other projects) and it should be available for all projects.
