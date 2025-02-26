@@ -30,4 +30,4 @@
   - [x] Move chrome extension files to a separate chrome-extension directory
 	- [x] Move MCP files to a separate mcp directory
 	- [x] Move scripts to a separate scripts directory
-- [ ] In all the cli prompts can you make them (Y/n) instead (defaulting to y)?
+- [x] In all the cli prompts can you make them (Y/n) instead (defaulting to y)?

@@ -43,11 +43,11 @@ def install_native_host():
 
 def setup_mcp():
     """Set up the Model Context Protocol server."""
-    print("\nWould you like to set up the Model Context Protocol (MCP) server? (y/n)")
+    print("\nWould you like to set up the Model Context Protocol (MCP) server? (Y/n)")
     print("This allows AI assistants to access and interact with your feedback log.")
     choice = input().strip().lower()
     
-    if choice == 'y' or choice == 'yes':
+    if choice == 'y' or choice == 'yes' or choice == '':
         print("\nSetting up MCP server...")
         try:
             subprocess.check_call([sys.executable, "mcp/install_mcp.py"])
@@ -76,10 +76,10 @@ def make_ff_executable():
             print(f"❌ Error making ff executable: {e}")
     
     # Ask if user wants to install ff globally
-    print("\nWould you like to make the 'ff' command available globally? (y/n)")
+    print("\nWould you like to make the 'ff' command available globally? (Y/n)")
     choice = input().strip().lower()
     
-    if choice == 'y' or choice == 'yes':
+    if choice == 'y' or choice == 'yes' or choice == '':
         if platform.system() == "Windows":
             # Add to PATH on Windows
             try:
