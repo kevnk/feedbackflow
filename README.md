@@ -55,7 +55,15 @@ This will:
 - Create the `.feedbackloop` directory in your home folder
 - Create an empty `feedback.log` file
 
-##### Manual Installation
+After installing the extension, you need to update the native messaging host with your extension ID:
+
+```bash
+python update_extension_id.py YOUR_EXTENSION_ID
+```
+
+Replace `YOUR_EXTENSION_ID` with the ID of your extension, which you can find in Chrome's extension management page (chrome://extensions/) after enabling Developer mode.
+
+##### Troubleshooting
 
 If the automatic installation doesn't work:
 
@@ -139,4 +147,21 @@ If the extension isn't working:
 2. Check if the native messaging host is installed correctly
 3. Look for errors in the Chrome extension's background page (inspect the extension)
 4. Check the error log in the `.feedbackloop` directory in your home folder
+
+### Native Messaging Issues
+
+If you see a "Native messaging error" when sending feedback:
+
+1. Make sure you've updated the extension ID in the native messaging host manifest:
+   ```bash
+   python update_extension_id.py YOUR_EXTENSION_ID
+   ```
+   Replace `YOUR_EXTENSION_ID` with the ID of your extension, which you can find in Chrome's extension management page (chrome://extensions/) after enabling Developer mode.
+
+2. Check that the `nativeMessaging` permission is in the extension's manifest.json
+3. Reload the extension after making any changes
+4. Verify that the native messaging host script is executable:
+   ```bash
+   chmod +x native-host/feedbackloop_host.py
+   ```
 

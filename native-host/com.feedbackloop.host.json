@@ -1,9 +1,9 @@
 {
   "name": "com.feedbackloop.host",
   "description": "FeedbackLoop Native Messaging Host",
-  "path": "REPLACE_WITH_ABSOLUTE_PATH/feedbackloop_host.py",
+  "path": "/Users/kevinkirchner/Sites/llm/feedbackloop/native-host/feedbackloop_host.py",
   "type": "stdio",
   "allowed_origins": [
-    "chrome-extension://REPLACE_WITH_EXTENSION_ID/"
+    "chrome-extension://kdbfklnnbmoikhilbhmndpaahhcdjpfa/"
   ]
-} 
+}

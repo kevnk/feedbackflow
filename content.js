@@ -31,18 +31,56 @@ window.addEventListener('message', function(event) {
   }
 });
 
-// Inject a small API into the page to allow direct feedback submission
-const script = document.createElement('script');
-script.textContent = `
-  window.FeedbackLoop = {
-    sendFeedback: function(feedback) {
+// Listen for the custom event from the page
+window.addEventListener('feedbackloop-send', function(event) {
+  if (event.detail && event.detail.feedback) {
+    // Forward the feedback to the background script
+    chrome.runtime.sendMessage({
+      action: 'saveFeedback',
+      feedback: event.detail.feedback,
+      url: window.location.href,
+      title: document.title,
+      timestamp: new Date().toISOString()
+    }, function(response) {
+      // Send a response back to the page
       window.postMessage({
-        type: 'FEEDBACK_LOOP',
-        feedback: feedback
+        type: 'FEEDBACK_LOOP_RESPONSE',
+        success: response && response.success,
+        warning: response && response.warning
       }, '*');
-      return true;
-    }
+    });
+  }
+});
+
+// Inject the FeedbackLoop API script
+function injectFeedbackLoopAPI() {
+  // Get the URL to the feedbackloop-api.js file
+  const apiScriptURL = chrome.runtime.getURL('feedbackloop-api.js');
+  
+  // Create a script element
+  const script = document.createElement('script');
+  script.src = apiScriptURL;
+  script.type = 'text/javascript';
+  
+  // Log when the script is loaded
+  script.onload = function() {
+    console.log('FeedbackLoop API script loaded successfully');
   };
-`;
-(document.head || document.documentElement).appendChild(script);
-script.remove(); 
+  
+  // Log any errors
+  script.onerror = function() {
+    console.error('Failed to load FeedbackLoop API script');
+  };
+  
+  // Append the script to the document
+  (document.head || document.documentElement).appendChild(script);
+  
+  console.log('FeedbackLoop API script injection attempted:', apiScriptURL);
+}
+
+// Execute the injection as soon as possible
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', injectFeedbackLoopAPI);
+} else {
+  injectFeedbackLoopAPI();
+} 
