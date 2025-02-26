@@ -9,7 +9,8 @@ from pathlib import Path
 # Get the absolute path of the current directory
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
-# Get the path to the host manifest
+# Get the path to the host manifest example
+example_manifest_path = os.path.join(current_dir, 'com.feedbackflow.host.json.example')
 manifest_path = os.path.join(current_dir, 'com.feedbackflow.host.json')
 
 # Get the path to the host script
@@ -18,10 +19,24 @@ host_path = os.path.join(current_dir, 'feedbackflow_host.py')
 # Make the host script executable
 os.chmod(host_path, 0o755)
 
-# Update the host manifest with the absolute path to the host script
-with open(manifest_path, 'r') as f:
-    manifest = json.load(f)
+# Create the actual manifest from the example
+if os.path.exists(example_manifest_path):
+    with open(example_manifest_path, 'r') as f:
+        manifest = json.load(f)
+else:
+    # Fallback if example doesn't exist
+    print("Warning: Example manifest not found. Creating a new manifest.")
+    manifest = {
+        "name": "com.feedbackflow.host",
+        "description": "Feedback Flow Native Messaging Host",
+        "path": "PLACEHOLDER_PATH",
+        "type": "stdio",
+        "allowed_origins": [
+            "chrome-extension://pghdmgneebhbbdabdfgodfojndbeenof/"
+        ]
+    }
 
+# Update the path in the manifest
 manifest['path'] = host_path
 
 # Write the updated manifest

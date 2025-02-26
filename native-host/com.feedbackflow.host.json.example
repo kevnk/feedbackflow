@@ -1,0 +1,9 @@
+{
+  "name": "com.feedbackflow.host",
+  "description": "Feedback Flow Native Messaging Host",
+  "path": "PLACEHOLDER_PATH",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://pghdmgneebhbbdabdfgodfojndbeenof/"
+  ]
+}

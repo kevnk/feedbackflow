@@ -12,14 +12,19 @@ def update_extension_id(extension_id):
         'com.feedbackflow.host.json'
     )
     
-    # Path to the native messaging host manifest in the project directory
+    # Paths to the native messaging host manifests in the project directory
+    project_dir = os.path.dirname(os.path.abspath(__file__))
     project_manifest_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
+        project_dir,
         'native-host', 'com.feedbackflow.host.json'
     )
+    project_example_manifest_path = os.path.join(
+        project_dir,
+        'native-host', 'com.feedbackflow.host.json.example'
+    )
     
-    # Update both manifests
-    for manifest_path in [chrome_manifest_path, project_manifest_path]:
+    # Update all manifests
+    for manifest_path in [chrome_manifest_path, project_manifest_path, project_example_manifest_path]:
         if os.path.exists(manifest_path):
             try:
                 # Read the manifest

@@ -68,16 +68,19 @@ Replace `YOUR_EXTENSION_ID` with the ID of your extension, which you can find in
 
 If the automatic installation doesn't work:
 
-1. Update the `native-host/com.feedbackflow.host.json` file:
-   - Replace `REPLACE_WITH_ABSOLUTE_PATH` with the absolute path to the `feedbackflow_host.py` script
-   - After loading the extension, replace `REPLACE_WITH_EXTENSION_ID` with your extension ID
+1. The repository contains an example manifest file (`native-host/com.feedbackflow.host.json.example`). During installation, this file is used as a template to create the actual manifest file with the correct paths.
 
-2. Copy the manifest file to the appropriate location:
+2. If you need to manually set up the native host:
+   - Copy the example manifest file to create `native-host/com.feedbackflow.host.json`
+   - Replace `PLACEHOLDER_PATH` with the absolute path to the `feedbackflow_host.py` script
+   - After loading the extension, update the allowed origins with your extension ID
+
+3. Copy the manifest file to the appropriate location:
    - **macOS**: `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/`
    - **Linux**: `~/.config/google-chrome/NativeMessagingHosts/`
    - **Windows**: Add a registry key (see installation script for details)
 
-3. Make the host script executable:
+4. Make the host script executable:
    ```bash
    chmod +x native-host/feedbackflow_host.py
    ```
