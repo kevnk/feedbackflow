@@ -288,6 +288,8 @@ The `ff` command adds FeedbackFlow information to your `~/.cursorrules` file, in
 - Code examples for sending feedback
 - Integration patterns for websites
 
+If you already have a `.cursorrules` file (either in your home directory or in the target project), the `ff` command will intelligently merge the FeedbackFlow information with your existing configuration instead of overwriting it.
+
 #### .github/copilot-instructions.md
 
 The `ff` command creates a `.github/copilot-instructions.md` file in your project directory, including:
@@ -296,6 +298,8 @@ The `ff` command creates a `.github/copilot-instructions.md` file in your projec
 - Response handling
 - Integration examples (feedback buttons, forms)
 - Best practices
+
+If you already have a `.github/copilot-instructions.md` file, the `ff` command will intelligently merge the FeedbackFlow information with your existing instructions instead of overwriting them.
 
 These files make it easier for AI assistants to help you integrate FeedbackFlow into your websites.
 

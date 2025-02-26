@@ -1,4 +1,4 @@
-# FeedbackFlow Integration Instructions
+# FeedbackFlow Integration
 
 ## Overview
 

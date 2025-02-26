@@ -19,3 +19,6 @@
     1. Interactive option during setup.py execution
     2. Dedicated install_ff_globally.py script
     3. Manual installation instructions
+  - Enhanced the `ff` command to intelligently merge with existing files:
+    1. Merges with existing .cursorrules in both home directory and project directory
+    2. Merges with existing .github/copilot-instructions.md in the project directory
