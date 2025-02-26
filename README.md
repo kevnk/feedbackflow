@@ -178,13 +178,7 @@ To easily add the feedback log to the Cursor composer context, you can use one o
 4. The feedback log will be copied to your workspace, opened in the editor, and its content will be copied to your clipboard
 5. You can now paste the content directly into the Composer
 
-### Method 2: Use the Keyboard Shortcut (VS Code only)
-
-1. Press `Alt+Shift+F` (or `Ctrl+Shift+F` on macOS) to run the "Add Feedback Log to Composer" task
-2. The feedback log will be copied to your workspace, opened in the editor, and its content will be copied to your clipboard
-3. You can now paste the content directly into the Composer
-
-### Method 3: Run the Script or Shortcut File
+### Method 2: Run the Script or Shortcut File
 
 #### On macOS:
 Double-click the `Add Feedback to Composer.command` file or run:

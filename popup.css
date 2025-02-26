@@ -46,4 +46,20 @@ button:hover {
 
 .error {
   color: red;
+}
+
+.actions {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.secondary-button {
+  background-color: #757575;
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.secondary-button:hover {
+  background-color: #616161;
 } 

@@ -61,4 +61,42 @@ Feedback: ${message.feedback}
     // Return true to indicate we will send a response asynchronously
     return true;
   }
+  else if (message.action === 'clearFeedback') {
+    // Clear the feedback in local storage
+    chrome.storage.local.set({ feedbackLog: '' }, function() {
+      console.log('Feedback cleared from local storage');
+      
+      // Also try to send to a native host if available
+      try {
+        chrome.runtime.sendNativeMessage(
+          'com.feedbackloop.host',
+          {
+            action: 'clearFeedback',
+            path: LOG_FILE_PATH
+          },
+          function(response) {
+            if (response && response.success) {
+              console.log('Feedback log file cleared');
+              sendResponse({ success: true });
+            } else {
+              console.warn('Failed to clear log file, but cleared local storage');
+              sendResponse({ 
+                success: true, 
+                warning: 'Cleared extension storage only. Native messaging not available.'
+              });
+            }
+          }
+        );
+      } catch (error) {
+        console.error('Native messaging error:', error);
+        sendResponse({ 
+          success: true, 
+          warning: 'Cleared extension storage only. Native messaging error: ' + error.message
+        });
+      }
+    });
+    
+    // Return true to indicate we will send a response asynchronously
+    return true;
+  }
 }); 

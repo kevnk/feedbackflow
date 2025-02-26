@@ -137,13 +137,32 @@ def add_feedback_to_composer():
     try:
         # Determine the command to open the file based on the platform
         if platform.system() == 'Darwin':  # macOS
-            cmd = ['code', '-r', temp_file_path]
+            # Try to use Cursor first, fall back to code if cursor is not available
+            try:
+                cmd = ['cursor', '-r', temp_file_path]
+                subprocess.run(cmd)
+            except FileNotFoundError:
+                # Fall back to VS Code if Cursor is not available
+                cmd = ['code', '-r', temp_file_path]
+                subprocess.run(cmd)
         elif platform.system() == 'Windows':
-            cmd = ['code', '-r', temp_file_path]
+            # Try to use Cursor first, fall back to code if cursor is not available
+            try:
+                cmd = ['cursor', '-r', temp_file_path]
+                subprocess.run(cmd)
+            except FileNotFoundError:
+                # Fall back to VS Code if Cursor is not available
+                cmd = ['code', '-r', temp_file_path]
+                subprocess.run(cmd)
         else:  # Linux
-            cmd = ['code', '-r', temp_file_path]
-        
-        subprocess.run(cmd)
+            # Try to use Cursor first, fall back to code if cursor is not available
+            try:
+                cmd = ['cursor', '-r', temp_file_path]
+                subprocess.run(cmd)
+            except FileNotFoundError:
+                # Fall back to VS Code if Cursor is not available
+                cmd = ['code', '-r', temp_file_path]
+                subprocess.run(cmd)
         
         print("\nFeedback log has been opened in the editor.")
         print("\nTo add it to the Cursor composer context:")

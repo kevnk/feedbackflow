@@ -43,6 +43,16 @@
       "problemMatcher": []
     },
     {
+      "label": "Clear Feedback Log",
+      "type": "shell",
+      "command": "python ${workspaceFolder}/clear_feedback.py",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Install Native Host",
       "type": "shell",
       "command": "python ${workspaceFolder}/native-host/install_host.py",

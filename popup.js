@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const feedbackText = document.getElementById('feedback-text');
   const sendButton = document.getElementById('send-feedback');
+  const clearButton = document.getElementById('clear-feedback');
   const statusDiv = document.getElementById('status');
 
   // Get the current tab information
@@ -44,6 +45,23 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
       statusDiv.textContent = 'Error: ' + error.message;
       statusDiv.className = 'status error';
+    }
+  });
+
+  // Clear feedback log when clear button is clicked
+  clearButton.addEventListener('click', function() {
+    // Show confirmation dialog
+    if (confirm('Are you sure you want to clear the feedback log? This cannot be undone.')) {
+      // Send message to background script
+      chrome.runtime.sendMessage({ action: 'clearFeedback' }, function(response) {
+        if (response && response.success) {
+          statusDiv.textContent = 'Feedback log cleared successfully!';
+          statusDiv.className = 'status success';
+        } else {
+          statusDiv.textContent = 'Error: ' + (response ? response.error : 'Unknown error');
+          statusDiv.className = 'status error';
+        }
+      });
     }
   });
 }); 

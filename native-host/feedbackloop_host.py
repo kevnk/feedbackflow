@@ -59,6 +59,16 @@ def main():
                 
                 # Send success response
                 send_message({'success': True})
+            elif message.get('action') == 'clearFeedback':
+                # Get the log file path
+                log_path = os.path.join(home_dir, message.get('path', '.feedbackloop/feedback.log'))
+                
+                # Clear the log file by opening it in write mode
+                with open(log_path, 'w', encoding='utf-8') as f:
+                    f.write("# FeedbackLoop Log File - Cleared on " + time.strftime('%Y-%m-%d %H:%M:%S') + "\n")
+                
+                # Send success response
+                send_message({'success': True})
             else:
                 # Send error for unknown action
                 send_message({'success': False, 'error': 'Unknown action'})
