@@ -1,17 +1,47 @@
-# Feedback Flow Chrome Extension
+# FeedbackFlow: AI-Driven Development Through Continuous Feedback
 
-A Chrome extension that allows you to send feedback from your website to your AI assistant. The feedback is stored in a log file that can be easily accessed by Cursor or VS Code.
+A powerful system that creates an infinite feedback loop between your websites and AI assistants. FeedbackFlow enables a seamless cycle of feedback collection, AI analysis, and code improvement - all integrated with Cursor, VS Code, and other AI coding tools.
+
+```
+┌─────────────────┐     ┌───────────────┐     ┌─────────────────┐
+│                 │     │               │     │                 │
+│  Your Website   │────▶│  FeedbackFlow │────▶│  AI Assistant   │
+│                 │     │               │     │                 │
+└────────┬────────┘     └───────────────┘     └────────┬────────┘
+         │                                             │
+         │                                             │
+         │                                             │
+         │                                             ▼
+┌────────▼────────┐                          ┌─────────────────┐
+│                 │                          │                 │
+│  Users          │◀─────────────────────────│  Code Changes   │
+│                 │                          │                 │
+└─────────────────┘                          └─────────────────┘
+
+                  THE INFINITE FEEDBACK LOOP
+```
+
+## What is FeedbackFlow?
+
+FeedbackFlow bridges the gap between user experiences on websites and AI-powered development environments. It creates a continuous improvement cycle:
+
+1. **Collect Feedback** - Automatically gather user interactions, errors, and explicit feedback from websites
+2. **Feed to AI** - Seamlessly deliver this feedback to your AI assistants in Cursor/VS Code
+3. **Analyze & Improve** - AI analyzes feedback patterns and suggests code improvements
+4. **Implement Changes** - Apply AI-suggested fixes and enhancements
+5. **Repeat** - Continue the cycle with new feedback on the improved code
+
+This creates a powerful self-improving system where AI continuously refines both your application code and the feedback collection mechanisms.
 
 ## Features
 
-- Send feedback directly from any website using the extension popup
-- JavaScript API for websites to send feedback programmatically
+- Chrome extension for capturing feedback from any website
+- JavaScript API for programmatic feedback collection
 - Native messaging host to write feedback to a local log file
-- Python script to read and watch the feedback log
-- VS Code/Cursor integration via tasks
-- Easy addition of feedback log to Cursor composer context
+- Direct integration with Cursor and VS Code via MCP (Model Context Protocol)
+- AI assistants can directly access, analyze, and mark feedback as resolved
 - `ff` command-line tool for AI assistant integration
-- Model Context Protocol (MCP) integration for direct AI assistant access to feedback
+- Comprehensive documentation and examples
 
 ## Project Structure
 
@@ -24,6 +54,178 @@ The project is organized into the following directories:
 - `cli/` - Command-line tools for AI assistant integration
 - `docs/` - Documentation files
 - `sample-website/` - Sample website demonstrating the JavaScript API
+
+## The AI Feedback Loop: Powering Continuous Improvement
+
+FeedbackFlow's most powerful feature is its ability to create a continuous feedback loop between your websites and AI assistants. This section explains how this works in practice.
+
+### How It Works
+
+1. **Embed Feedback Collection**: Add FeedbackFlow's JavaScript API to your website to collect user feedback, errors, and interactions
+2. **Capture Real-World Data**: As users interact with your site, FeedbackFlow automatically captures valuable feedback
+3. **AI Analysis**: Your AI assistant (in Cursor/VS Code) directly accesses this feedback through the Model Context Protocol (MCP)
+4. **Intelligent Improvements**: The AI analyzes patterns, suggests code improvements, and implements fixes
+5. **Continuous Refinement**: As new feedback comes in, the AI continues to refine both your code and the feedback collection mechanisms
+
+### Model Context Protocol (MCP) Integration
+
+FeedbackFlow leverages the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) to create a direct connection between your feedback data and AI assistants. This allows AI to:
+
+- **Read feedback in real-time**: Access the latest user feedback without manual intervention
+- **Analyze feedback patterns**: Identify common issues and improvement opportunities
+- **Mark issues as resolved**: Track which feedback items have been addressed
+- **Add new feedback entries**: Create feedback entries programmatically for testing
+- **Clear feedback**: Manage the feedback log directly
+
+This creates a truly autonomous improvement cycle where AI can drive the entire process from feedback collection to code improvement.
+
+### Example: The Complete AI-Driven Development Cycle
+
+Here's a complete example of how FeedbackFlow enables AI-driven development:
+
+1. **AI Generates Initial Code**:
+   ```javascript
+   // AI-generated form validation with feedback collection
+   function validateForm() {
+     try {
+       const email = document.getElementById('email').value;
+       if (!email.includes('@')) {
+         window.FeedbackFlow.sendFeedback(
+           'Invalid email format entered',
+           'signup-form.js',
+           {field: 'email', severity: 'medium'}
+         );
+         return false;
+       }
+       return true;
+     } catch (error) {
+       window.FeedbackFlow.sendFeedback(
+         `Form validation error: ${error.message}`,
+         'signup-form.js',
+         {severity: 'high'}
+       );
+       return false;
+     }
+   }
+   ```
+
+2. **Users Interact With Website**:
+   - A user enters "user@example" (missing the TLD)
+   - FeedbackFlow captures this as valid format but potentially problematic
+   - Multiple similar patterns are collected
+
+3. **AI Analyzes Feedback**:
+   ```python
+   # AI in Cursor accesses feedback through MCP
+   feedback_data = await read_resource("feedback://log")
+   
+   # AI identifies pattern of incomplete email domains
+   email_issues = [entry for entry in feedback_data if 'email' in entry.get('context', {}).get('field', '')]
+   
+   # AI determines a better validation approach is needed
+   if len(email_issues) > 5:
+     print("Multiple email validation issues detected. Recommending improved validation.")
+   ```
+
+4. **AI Implements Improvement**:
+   ```javascript
+   // AI-improved email validation
+   function validateEmail(email) {
+     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     return regex.test(email);
+   }
+   ```
+
+5. **AI Marks Feedback as Addressed**:
+   ```python
+   # AI marks related feedback as resolved
+   for issue in email_issues:
+     await invoke_tool("mark_feedback_addressed", {
+       "timestamp": issue['timestamp'],
+       "resolution": "Implemented improved email validation with regex pattern"
+     })
+   ```
+
+6. **Cycle Continues**: New feedback is collected on the improved code, driving further refinements
+
+### Setting Up the MCP Integration
+
+The MCP server can be set up during the FeedbackFlow installation process or separately:
+
+1. **During Installation**:
+   - When running `setup.py`, you'll be asked if you want to set up the MCP server
+   - If you choose yes, the script will install the necessary dependencies and set up the server
+
+2. **Separate Setup**:
+   - Run `python install_mcp.py` to install the MCP dependencies and set up the server
+   - Or use the command-line tool: `./ff-mcp install`
+
+### Running the MCP Server
+
+There are several ways to run the MCP server:
+
+1. **Using the Command-Line Tool**:
+   - Start the server: `./ff-mcp start`
+   - Start with specific options: `./ff-mcp start --transport sse --port 8080`
+   - Stop the service: `./ff-mcp stop`
+   - Check status: `./ff-mcp status`
+
+2. **Direct Execution**:
+   - Run `python mcp_server.py` to start the server directly
+   - Press Ctrl+C to stop the server
+
+3. **Helper Script**:
+   - Run `python run_mcp_server.py` which handles dependency checking and graceful shutdown
+
+4. **As a Service** (Linux/macOS with systemd):
+   - After setup, the server can run as a systemd service
+
+### Cursor IDE Integration
+
+FeedbackFlow MCP integrates seamlessly with [Cursor IDE](https://cursor.sh/), enabling an AI-driven development cycle:
+
+1. **Quick Setup**:
+   ```bash
+   ./ff-mcp cursor
+   ```
+   This command guides you through the setup process and provides instructions for adding FeedbackFlow to Cursor.
+
+2. **AI-Driven Development Cycle**:
+   - **Code Generation**: AI in Cursor writes website code with embedded feedback collection using `window.FeedbackFlow.sendFeedback()`
+   - **Feedback Collection**: During testing, the website automatically sends feedback about user interactions and errors
+   - **Feedback Analysis**: AI accesses and analyzes this feedback through MCP resources
+   - **Code Improvement**: AI makes code adjustments based on the feedback
+   - **Feedback Resolution**: AI marks feedback as addressed, completing the loop
+
+3. **Example Workflow**:
+   ```javascript
+   // AI-generated code for error tracking
+   try {
+     // Complex operation
+   } catch (error) {
+     window.FeedbackFlow.sendFeedback(
+       `Error occurred: ${error.message}`,
+       'payment-form.js',
+       {severity: 'high', component: 'PaymentProcessor'}
+     );
+   }
+   ```
+
+   Later, in Cursor:
+   ```
+   // AI accesses feedback
+   feedback_data = await read_resource("feedback://log")
+   
+   // AI marks issue as resolved after fixing
+   await invoke_tool("mark_feedback_addressed", {
+     "timestamp": "2023-01-01 12:34:56",
+     "resolution": "Improved error handling in payment form"
+   })
+   ```
+
+This creates a powerful self-improving system where the AI can continuously refine both the application code and the feedback collection mechanisms.
+
+For more detailed information about the MCP integration and Cursor setup, see [MCP_README.md](docs/MCP_README.md).
 
 ## Installation
 
@@ -316,118 +518,36 @@ If you already have a `.github/copilot-instructions.md` file, the `ff` command w
 
 These files make it easier for AI assistants to help you integrate FeedbackFlow into your websites.
 
-## Model Context Protocol (MCP) Integration
+## Integrating FeedbackFlow Into Your Workflow
 
-FeedbackFlow now supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), which allows AI assistants to directly access and interact with your feedback log, creating a seamless AI-driven development cycle.
+FeedbackFlow offers multiple ways to integrate into your development workflow, making it easy to establish the AI feedback loop regardless of your preferred tools or environment.
 
-### Setup
+### Using with npx (JavaScript/Node.js Developers)
 
-The MCP server can be set up during the FeedbackFlow installation process or separately:
-
-1. **During Installation**:
-   - When running `setup.py`, you'll be asked if you want to set up the MCP server
-   - If you choose yes, the script will install the necessary dependencies and set up the server
-
-2. **Separate Setup**:
-   - Run `python install_mcp.py` to install the MCP dependencies and set up the server
-   - Or use the command-line tool: `./ff-mcp install`
-
-### Running the MCP Server
-
-There are several ways to run the MCP server:
-
-1. **Using the Command-Line Tool**:
-   - Start the server: `./ff-mcp start`
-   - Start with specific options: `./ff-mcp start --transport sse --port 8080`
-   - Stop the service: `./ff-mcp stop`
-   - Check status: `./ff-mcp status`
-
-2. **Direct Execution**:
-   - Run `python mcp_server.py` to start the server directly
-   - Press Ctrl+C to stop the server
-
-3. **Helper Script**:
-   - Run `python run_mcp_server.py` which handles dependency checking and graceful shutdown
-
-4. **As a Service** (Linux/macOS with systemd):
-   - After setup, the server can run as a systemd service
-
-### Cursor IDE Integration
-
-FeedbackFlow MCP integrates seamlessly with [Cursor IDE](https://cursor.sh/), enabling an AI-driven development cycle:
-
-1. **Quick Setup**:
-   ```bash
-   ./ff-mcp cursor
-   ```
-   This command guides you through the setup process and provides instructions for adding FeedbackFlow to Cursor.
-
-2. **AI-Driven Development Cycle**:
-   - **Code Generation**: AI in Cursor writes website code with embedded feedback collection using `window.FeedbackFlow.sendFeedback()`
-   - **Feedback Collection**: During testing, the website automatically sends feedback about user interactions and errors
-   - **Feedback Analysis**: AI accesses and analyzes this feedback through MCP resources
-   - **Code Improvement**: AI makes code adjustments based on the feedback
-   - **Feedback Resolution**: AI marks feedback as addressed, completing the loop
-
-3. **Example Workflow**:
-   ```javascript
-   // AI-generated code for error tracking
-   try {
-     // Complex operation
-   } catch (error) {
-     window.FeedbackFlow.sendFeedback(
-       `Error occurred: ${error.message}`,
-       'payment-form.js',
-       {severity: 'high', component: 'PaymentProcessor'}
-     );
-   }
-   ```
-
-   Later, in Cursor:
-   ```
-   // AI accesses feedback
-   feedback_data = await read_resource("feedback://log")
-   
-   // AI marks issue as resolved after fixing
-   await invoke_tool("mark_feedback_addressed", {
-     "timestamp": "2023-01-01 12:34:56",
-     "resolution": "Improved error handling in payment form"
-   })
-   ```
-
-This creates a powerful self-improving system where the AI can continuously refine both the application code and the feedback collection mechanisms.
-
-For more detailed information about the MCP integration and Cursor setup, see [MCP_README.md](MCP_README.md).
-
-## Using with npx
-
-FeedbackFlow can be used directly with `npx` without installing it globally:
+FeedbackFlow can be seamlessly integrated into JavaScript projects using `npx`, allowing you to manage the feedback loop without installing anything globally:
 
 ```bash
-# Show help
-npx feedbackflow --help
+# Start the AI feedback loop with a single command
+npx feedbackflow mcp start --cursor
 
-# Read feedback
+# Read collected feedback
 npx feedbackflow read
 
-# Clear feedback
+# Clear feedback after addressing issues
 npx feedbackflow clear
 
-# Add feedback to Cursor composer
+# Add feedback directly to Cursor composer for AI analysis
 npx feedbackflow add-to-composer
-
-# MCP commands
-npx feedbackflow mcp start
-npx feedbackflow mcp stop
-npx feedbackflow mcp cursor
 ```
 
-## Using with uv (Recommended for Python Users)
+This approach is perfect for JavaScript/TypeScript projects where you want to quickly establish the feedback loop without modifying your global environment.
 
-Since FeedbackFlow is primarily a Python project, you can also install and use it with `uv`, the fast Python package installer:
+### Using with uv (Python Developers)
+
+For Python developers, FeedbackFlow integrates with `uv`, the fast Python package installer, providing a more native Python experience:
 
 ```bash
-# Install with uv
+# Install with uv for optimal Python integration
 python install_with_uv.py
 ```
 
@@ -436,22 +556,24 @@ Or using npm:
 npm run install-with-uv
 ```
 
-After installation with `uv`, you can use FeedbackFlow from anywhere:
+After installation with `uv`, you can use FeedbackFlow commands from anywhere to manage your AI feedback loop:
 
 ```bash
-# Show help
-feedbackflow --help
+# Start the feedback loop with Cursor integration
+feedbackflow mcp start --cursor
 
-# Read feedback
+# View collected feedback for AI analysis
 feedbackflow read
 
-# MCP commands
-feedbackflow mcp start --cursor
+# Clear feedback after AI has addressed issues
+feedbackflow clear
 ```
 
-## Global Installation
+This approach is recommended for Python developers who want the most efficient installation and integration experience.
 
-You can install FeedbackFlow globally to use it without `npx`:
+### Global Installation for Seamless Workflow
+
+For the most streamlined experience, you can install FeedbackFlow globally:
 
 ```bash
 # Install globally
@@ -559,5 +681,5 @@ If you encounter a "Failed to create client" error when adding FeedbackFlow to C
 
 7. **Run the server manually**: Start the MCP server in a separate terminal and connect to it using the SSE transport in Cursor.
 
-For more detailed troubleshooting, see the [MCP_README.md](MCP_README.md) file.
+For more detailed troubleshooting, see the [MCP_README.md](docs/MCP_README.md) file.
 
