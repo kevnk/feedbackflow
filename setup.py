@@ -3,6 +3,8 @@ import os
 import sys
 import subprocess
 import platform
+import json
+import shutil
 
 def check_python_version():
     """Check if Python version is 3.6 or higher."""
@@ -39,6 +41,74 @@ def install_native_host():
         print("You may need to run the native host installation manually.")
         print("Run: python native-host/install_host.py")
 
+def make_ff_executable():
+    """Make the ff command executable and offer to install it globally."""
+    print("\nMaking the 'ff' command executable...")
+    
+    # Get the current directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Make the ff script executable on Unix-like systems
+    if platform.system() != "Windows":
+        ff_path = os.path.join(current_dir, "ff")
+        try:
+            os.chmod(ff_path, 0o755)  # rwxr-xr-x
+            print(f"✅ Made {ff_path} executable")
+        except Exception as e:
+            print(f"❌ Error making ff executable: {e}")
+    
+    # Ask if user wants to install ff globally
+    print("\nWould you like to make the 'ff' command available globally? (y/n)")
+    choice = input().strip().lower()
+    
+    if choice == 'y' or choice == 'yes':
+        if platform.system() == "Windows":
+            # Add to PATH on Windows
+            try:
+                subprocess.run(f'setx PATH "%PATH%;{current_dir}"', shell=True, check=True)
+                print("✅ Added FeedbackFlow directory to PATH")
+                print("You'll need to restart your command prompt for the changes to take effect.")
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Error adding to PATH: {e}")
+                print("You can manually add the directory to your PATH:")
+                print(f'  setx PATH "%PATH%;{current_dir}"')
+        else:
+            # Create symlink on Unix-like systems
+            try:
+                # Check if /usr/local/bin exists and is writable
+                if os.path.exists("/usr/local/bin") and os.access("/usr/local/bin", os.W_OK):
+                    symlink_path = "/usr/local/bin/ff"
+                    # Remove existing symlink if it exists
+                    if os.path.exists(symlink_path):
+                        os.remove(symlink_path)
+                    os.symlink(ff_path, symlink_path)
+                    print(f"✅ Created symlink at {symlink_path}")
+                else:
+                    # Try with sudo
+                    print("Creating symlink requires administrator privileges...")
+                    subprocess.run(f"sudo ln -sf {ff_path} /usr/local/bin/ff", shell=True, check=True)
+                    print("✅ Created symlink at /usr/local/bin/ff")
+            except (OSError, subprocess.CalledProcessError) as e:
+                print(f"❌ Error creating symlink: {e}")
+                print("\nAlternatively, you can add this directory to your PATH:")
+                print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.bashrc')
+                print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.zshrc  # if using zsh')
+    else:
+        # Print usage instructions
+        print("\nYou can use the 'ff' command to add FeedbackFlow AI assistant integration to any project:")
+        print(f"  {current_dir}/ff ./your-project-directory")
+        print("\nFor easier access later, you can add this directory to your PATH or create a symlink:")
+        
+        if platform.system() == "Windows":
+            print("\nOn Windows:")
+            print(f'  setx PATH "%PATH%;{current_dir}"')
+        else:
+            print("\nOn macOS/Linux:")
+            print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.bashrc')
+            print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.zshrc  # if using zsh')
+            print("  Or create a symlink:")
+            print(f"  sudo ln -s {current_dir}/ff /usr/local/bin/ff")
+
 def setup_extension():
     """Set up the Chrome extension."""
     print("\nExtension setup complete!")
@@ -64,10 +134,15 @@ def main():
     # Install native host
     install_native_host()
     
+    # Make ff executable
+    make_ff_executable()
+    
     # Set up extension
     setup_extension()
     
     print("\nSetup complete! You can now use the Feedback Flow extension.")
+    print("\nTo add FeedbackFlow AI assistant integration to a project, use the 'ff' command:")
+    print("  ./ff ./your-project-directory")
 
 if __name__ == "__main__":
     main() 

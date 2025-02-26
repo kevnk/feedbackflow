@@ -13,3 +13,9 @@
 - [x] instead of creating a copy of the feedback.log, can we just open the ~/.feedbackflow/feedback.log file in the editor?
 - [x] is native-host/com.feedbackflow.host.json created when the extension is installed, if so, it probably should be in the repo. If not, we shouldn't use my username in the path.
   - Solution: Created com.feedbackflow.host.json.example with placeholder path, added the actual file to .gitignore, and updated install_host.py to use the example as a template.
+- [x] Create some .cursorrules for the project and .github/copilot-instructions.md that can be copied into the user's .cursorrules and .github/copilot-instructions.md files — for all project if possible.
+  - Solution: Created a separate `ff` command-line tool that can be used to add FeedbackFlow AI assistant integration files to any project.
+  - Added multiple options for installing the `ff` command globally:
+    1. Interactive option during setup.py execution
+    2. Dedicated install_ff_globally.py script
+    3. Manual installation instructions

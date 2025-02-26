@@ -10,6 +10,7 @@ A Chrome extension that allows you to send feedback from your website to your AI
 - Python script to read and watch the feedback log
 - VS Code/Cursor integration via tasks
 - Easy addition of feedback log to Cursor composer context
+- `ff` command-line tool for AI assistant integration
 
 ## Installation
 
@@ -25,6 +26,7 @@ This will:
 - Install required dependencies
 - Create icon files for the extension
 - Install the native messaging host
+- Make the `ff` command executable
 - Guide you through loading the extension in Chrome
 
 Alternatively, you can use the VS Code/Cursor task "Setup Extension" to run the setup script.
@@ -210,4 +212,90 @@ This will:
 4. Show a notification
 
 You can then paste the content directly into the Composer, which is the easiest method to add it to the context.
+
+## AI Assistant Integration
+
+The FeedbackFlow extension includes a command-line tool called `ff` that helps AI assistants understand how to use FeedbackFlow in your projects.
+
+### Using the `ff` Command
+
+To add FeedbackFlow AI assistant integration to any project:
+
+```bash
+# Navigate to the FeedbackFlow directory
+cd path/to/feedbackflow
+
+# Run the ff command with your project directory
+./ff ./path/to/your-project
+```
+
+#### Installing `ff` Globally
+
+You have several options to make the `ff` command available globally:
+
+##### Option 1: During Setup
+
+When running `setup.py`, you'll be asked if you want to install the `ff` command globally. If you choose yes:
+- On Windows: The FeedbackFlow directory will be added to your PATH
+- On macOS/Linux: A symlink will be created in /usr/local/bin
+
+##### Option 2: Using the Installation Script
+
+Run the dedicated installation script:
+
+```bash
+python install_ff_globally.py
+```
+
+This will install the `ff` command globally on your system.
+
+##### Option 3: Manual Installation
+
+###### On Windows:
+```
+setx PATH "%PATH%;C:\path\to\feedbackflow"
+```
+
+###### On macOS/Linux:
+```bash
+# Add to PATH
+echo 'export PATH="$PATH:/path/to/feedbackflow"' >> ~/.bashrc
+echo 'export PATH="$PATH:/path/to/feedbackflow"' >> ~/.zshrc  # if using zsh
+
+# OR create a symlink
+sudo ln -s /path/to/feedbackflow/ff /usr/local/bin/ff
+```
+
+Once installed globally, you can use the command from anywhere:
+
+```bash
+# Run from any directory
+ff ./your-project
+```
+
+This will:
+
+1. Add FeedbackFlow information to your `~/.cursorrules` file, which helps Cursor AI understand how to use the FeedbackFlow API in your projects.
+2. Create a `.github/copilot-instructions.md` file in your project directory, which provides GitHub Copilot with detailed instructions on how to use FeedbackFlow.
+
+### What's Included
+
+#### .cursorrules
+
+The `ff` command adds FeedbackFlow information to your `~/.cursorrules` file, including:
+
+- Description of FeedbackFlow capabilities
+- Code examples for sending feedback
+- Integration patterns for websites
+
+#### .github/copilot-instructions.md
+
+The `ff` command creates a `.github/copilot-instructions.md` file in your project directory, including:
+
+- Basic usage examples
+- Response handling
+- Integration examples (feedback buttons, forms)
+- Best practices
+
+These files make it easier for AI assistants to help you integrate FeedbackFlow into your websites.
 

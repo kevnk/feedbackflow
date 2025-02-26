@@ -1,0 +1,27 @@
+{
+  "projectRules": {
+    "name": "Project with FeedbackFlow Integration",
+    "description": "This project uses FeedbackFlow to collect user feedback from the website and send it to AI assistants.",
+    "capabilities": [
+      "Can send user feedback from the website to AI assistants",
+      "Feedback is stored in a local log file (~/.feedbackflow/feedback.log)",
+      "Feedback can be easily accessed in Cursor or VS Code"
+    ],
+    "feedbackFlow": {
+      "description": "FeedbackFlow is a Chrome extension that allows collecting user feedback from websites.",
+      "usage": [
+        "Check if FeedbackFlow API is available with: window.FeedbackFlow",
+        "Send feedback with: window.FeedbackFlow.sendFeedback('Your feedback message')",
+        "Listen for responses with event listeners for 'FEEDBACK_FLOW_RESPONSE' messages"
+      ],
+      "codeExamples": {
+        "basic": "if (window.FeedbackFlow) { window.FeedbackFlow.sendFeedback('User feedback here'); }",
+        "withResponseHandling": "window.addEventListener('message', function(event) { if (event.source !== window) return; if (event.data.type && event.data.type === 'FEEDBACK_FLOW_RESPONSE') { console.log('Feedback sent:', event.data.success); } });"
+      },
+      "integration": {
+        "addToHTML": "<script src=\"path/to/feedbackflow-api.js\"></script>",
+        "addToJS": "// FeedbackFlow integration\nfunction sendFeedback(message) {\n  if (window.FeedbackFlow) {\n    window.FeedbackFlow.sendFeedback(message);\n    return true;\n  }\n  return false;\n}"
+      }
+    }
+  }
+} 
