@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedbackLoop Demo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    .feedback-container {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .status {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .success {
+      color: #27ae60;
+    }
+    .error {
+      color: #e74c3c;
+    }
+    code {
+      background-color: #f8f8f8;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    pre {
+      background-color: #f8f8f8;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>FeedbackLoop Demo</h1>
+  
+  <p>This page demonstrates how to use the FeedbackLoop Chrome extension to send feedback from your website to your AI assistant.</p>
+  
+  <div class="feedback-container">
+    <h2>Send Feedback</h2>
+    <textarea id="feedback-text" placeholder="Type your feedback here..."></textarea>
+    <button id="send-feedback">Send Feedback</button>
+    <div id="status" class="status"></div>
+  </div>
+  
+  <h2>How It Works</h2>
+  <p>The FeedbackLoop Chrome extension injects a JavaScript API into your web page that you can use to send feedback directly from your code.</p>
+  
+  <h3>Using the API</h3>
+  <p>You can send feedback programmatically using the following code:</p>
+  <pre><code>// Check if the FeedbackLoop API is available
+if (window.FeedbackLoop) {
+  // Send feedback
+  window.FeedbackLoop.sendFeedback("Your feedback message here");
+}</code></pre>
+  
+  <h3>Listening for Responses</h3>
+  <p>You can also listen for responses from the extension:</p>
+  <pre><code>window.addEventListener('message', function(event) {
+  // Only accept messages from the same frame
+  if (event.source !== window) return;
+
+  // Check if the message is from our expected format
+  if (event.data.type && event.data.type === 'FEEDBACK_LOOP_RESPONSE') {
+    console.log('Feedback sent:', event.data.success);
+    if (event.data.warning) {
+      console.warn('Warning:', event.data.warning);
+    }
+  }
+});</code></pre>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const feedbackText = document.getElementById('feedback-text');
+      const sendButton = document.getElementById('send-feedback');
+      const statusDiv = document.getElementById('status');
+      
+      // Check if the FeedbackLoop API is available
+      if (!window.FeedbackLoop) {
+        statusDiv.textContent = 'FeedbackLoop extension is not installed or not active.';
+        statusDiv.className = 'status error';
+        sendButton.disabled = true;
+      }
+      
+      // Send feedback when button is clicked
+      sendButton.addEventListener('click', function() {
+        const feedback = feedbackText.value.trim();
+        
+        if (!feedback) {
+          statusDiv.textContent = 'Please enter some feedback.';
+          statusDiv.className = 'status error';
+          return;
+        }
+        
+        if (window.FeedbackLoop) {
+          // Send feedback using the API
+          window.FeedbackLoop.sendFeedback(feedback);
+          statusDiv.textContent = 'Sending feedback...';
+          statusDiv.className = 'status';
+        } else {
+          statusDiv.textContent = 'FeedbackLoop extension is not installed or not active.';
+          statusDiv.className = 'status error';
+        }
+      });
+      
+      // Listen for responses from the extension
+      window.addEventListener('message', function(event) {
+        // Only accept messages from the same frame
+        if (event.source !== window) return;
+        
+        // Check if the message is from our expected format
+        if (event.data.type && event.data.type === 'FEEDBACK_LOOP_RESPONSE') {
+          if (event.data.success) {
+            statusDiv.textContent = 'Feedback sent successfully!';
+            statusDiv.className = 'status success';
+            feedbackText.value = '';
+          } else {
+            statusDiv.textContent = 'Error sending feedback.';
+            statusDiv.className = 'status error';
+          }
+          
+          if (event.data.warning) {
+            console.warn('Warning:', event.data.warning);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html> 
