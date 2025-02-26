@@ -23,6 +23,17 @@
       "isBackground": true
     },
     {
+      "label": "Watch and Add Feedback to Composer",
+      "type": "shell",
+      "command": "python ${workspaceFolder}/watch_and_add_feedback.py",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
       "label": "Open Feedback Log for Composer",
       "type": "shell",
       "command": "python -c \"import os, pathlib; home = str(pathlib.Path.home()); log_path = os.path.join(home, '.feedbackloop', 'feedback.log'); print(f'Opening {log_path}'); os.system(f'code -r \"{log_path}\"') if os.path.exists(log_path) else print('Feedback log not found at ' + log_path)\"",

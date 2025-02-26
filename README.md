@@ -120,6 +120,9 @@ The repository includes VS Code tasks for reading feedback:
 3. Choose one of the following tasks:
    - "Read Feedback Log" - Displays the current contents of the log file
    - "Watch Feedback Log" - Continuously watches for new feedback entries
+   - "Watch and Add Feedback to Composer" - Watches for new feedback and automatically adds it to the Cursor composer
+   - "Add Feedback Log to Composer" - Copies the feedback log to the clipboard and opens it in the editor
+   - "Clear Feedback Log" - Clears the feedback log file
    - "Install Native Host" - Runs the installation script
    - "Setup Extension" - Runs the complete setup script
    - "Run Sample Website" - Starts a local server for the sample website
