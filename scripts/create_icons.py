@@ -2,7 +2,7 @@
 import os
 from PIL import Image
 
-def create_icon(size, output_dir="images", source_image="../public/ff-icon.png"):
+def create_icon(size, output_dir="chrome-extension/images", source_image="../public/ff-icon.png"):
     """Create icon of the specified size from the source image."""
     # Get the absolute path of the current directory
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -32,5 +32,5 @@ if __name__ == "__main__":
     create_icon(48)
     create_icon(128)
     
-    print("\nIcons created successfully in the 'images' directory.")
+    print("\nIcons created successfully in the 'chrome-extension/images' directory.")
     print("The icons were created from the source image: public/ff-icon.png") 

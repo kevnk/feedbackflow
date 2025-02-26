@@ -24,7 +24,7 @@ def install_dependencies():
 
 def create_icons():
     """Create icon files for the extension."""
-    print("Creating extension icons...")
+    print("Creating extension icons in chrome-extension/images directory...")
     try:
         subprocess.check_call([sys.executable, "scripts/create_icons.py"])
     except subprocess.CalledProcessError:
