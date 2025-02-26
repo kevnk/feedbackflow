@@ -175,20 +175,39 @@ To easily add the feedback log to the Cursor composer context, you can use one o
 1. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) to open the Command Palette
 2. Type "Tasks: Run Task" and select it
 3. Select "Add Feedback Log to Composer"
-4. The feedback log will be copied to your workspace and opened in the editor
-5. Drag and drop the opened file from the Explorer into the Composer
+4. The feedback log will be copied to your workspace, opened in the editor, and its content will be copied to your clipboard
+5. You can now paste the content directly into the Composer
 
-### Method 2: Use the Keyboard Shortcut
+### Method 2: Use the Keyboard Shortcut (VS Code only)
 
-1. Press `Ctrl+Alt+F` to run the "Add Feedback Log to Composer" task
-2. The feedback log will be copied to your workspace and opened in the editor
-3. Drag and drop the opened file from the Explorer into the Composer
+1. Press `Alt+Shift+F` (or `Ctrl+Shift+F` on macOS) to run the "Add Feedback Log to Composer" task
+2. The feedback log will be copied to your workspace, opened in the editor, and its content will be copied to your clipboard
+3. You can now paste the content directly into the Composer
 
-### Method 3: Run the Script Directly
+### Method 3: Run the Script or Shortcut File
 
+#### On macOS:
+Double-click the `Add Feedback to Composer.command` file or run:
+```bash
+./add_feedback.sh
+```
+
+#### On Windows:
+Double-click the `add_feedback.bat` file or run:
+```
+add_feedback.bat
+```
+
+Or directly with Python on any platform:
 ```bash
 python add_feedback_to_composer.py
 ```
 
-This will copy the feedback log to your workspace and open it in the editor, allowing you to easily add it to the Composer context.
+This will:
+1. Copy the feedback log to your workspace
+2. Open it in the editor
+3. Copy its content to your clipboard
+4. Show a notification
+
+You can then paste the content directly into the Composer, which is the easiest method to add it to the context.
 

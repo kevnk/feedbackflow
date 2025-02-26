@@ -1,7 +1,14 @@
 [
     {
-        "key": "ctrl+alt+f",
+        "key": "alt+shift+f",
         "command": "workbench.action.tasks.runTask",
-        "args": "Add Feedback Log to Composer"
+        "args": "Add Feedback Log to Composer",
+        "when": "!isMac"
+    },
+    {
+        "key": "ctrl+shift+f",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Add Feedback Log to Composer",
+        "when": "isMac"
     }
 ] 

@@ -6,6 +6,84 @@ from pathlib import Path
 import subprocess
 import platform
 
+def copy_to_clipboard(text):
+    """Copy text to clipboard using platform-specific methods"""
+    try:
+        # Try using platform-specific commands
+        if platform.system() == 'Darwin':  # macOS
+            process = subprocess.Popen(
+                'pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
+            process.communicate(text.encode('utf-8'))
+            return True
+        elif platform.system() == 'Windows':
+            process = subprocess.Popen(
+                'clip', stdin=subprocess.PIPE)
+            process.communicate(text.encode('utf-8'))
+            return True
+        else:  # Linux
+            # Try xclip (X11)
+            try:
+                process = subprocess.Popen(
+                    ['xclip', '-selection', 'clipboard'],
+                    stdin=subprocess.PIPE)
+                process.communicate(text.encode('utf-8'))
+                return True
+            except FileNotFoundError:
+                # Try xsel (X11)
+                try:
+                    process = subprocess.Popen(
+                        ['xsel', '--clipboard', '--input'],
+                        stdin=subprocess.PIPE)
+                    process.communicate(text.encode('utf-8'))
+                    return True
+                except FileNotFoundError:
+                    # Try wl-copy (Wayland)
+                    try:
+                        process = subprocess.Popen(
+                            ['wl-copy'],
+                            stdin=subprocess.PIPE)
+                        process.communicate(text.encode('utf-8'))
+                        return True
+                    except FileNotFoundError:
+                        print("Could not find clipboard command. Content not copied to clipboard.")
+                        return False
+    except Exception as e:
+        print(f"Error copying to clipboard: {e}")
+        return False
+
+def show_notification(title, message):
+    """Show a notification using platform-specific methods"""
+    try:
+        if platform.system() == 'Darwin':  # macOS
+            os.system(f"""
+                osascript -e 'display notification "{message}" with title "{title}"'
+            """)
+        elif platform.system() == 'Windows':
+            # Using PowerShell for Windows notifications
+            powershell_cmd = f"""
+            powershell -Command "
+            [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+            [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
+            $template = [Windows.UI.Notifications.ToastTemplateType]::ToastText02
+            $xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent($template)
+            $text = $xml.GetElementsByTagName('text')
+            $text[0].AppendChild($xml.CreateTextNode('{title}'))
+            $text[1].AppendChild($xml.CreateTextNode('{message}'))
+            $toast = [Windows.UI.Notifications.ToastNotification]::new($xml)
+            [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('FeedbackLoop').Show($toast)
+            "
+            """
+            subprocess.run(powershell_cmd, shell=True)
+        else:  # Linux
+            # Try using notify-send
+            try:
+                subprocess.run(['notify-send', title, message])
+            except FileNotFoundError:
+                print(f"{title}: {message}")
+    except Exception as e:
+        print(f"Error showing notification: {e}")
+        print(f"{title}: {message}")
+
 def add_feedback_to_composer():
     """
     Copy the feedback.log file to a temporary file in the workspace and open it in the editor.
@@ -37,6 +115,24 @@ def add_feedback_to_composer():
         print(f"Error copying feedback log: {e}")
         return
     
+    # Read the content of the feedback log
+    try:
+        with open(log_path, 'r', encoding='utf-8') as f:
+            feedback_content = f.read()
+            
+        # Copy the content to the clipboard
+        if copy_to_clipboard(feedback_content):
+            print("Feedback log content copied to clipboard!")
+            print("You can now paste it directly into the Composer.")
+            
+            # Show a notification
+            show_notification(
+                "FeedbackLoop",
+                "Feedback log content has been copied to your clipboard!"
+            )
+    except Exception as e:
+        print(f"Error copying to clipboard: {e}")
+    
     # Open the file in the editor
     try:
         # Determine the command to open the file based on the platform
@@ -51,11 +147,10 @@ def add_feedback_to_composer():
         
         print("\nFeedback log has been opened in the editor.")
         print("\nTo add it to the Cursor composer context:")
-        print("1. Drag and drop the file from the Explorer into the Composer")
-        print("   OR")
-        print("2. Right-click on the file in the Explorer and select 'Add to Composer' (if available)")
-        print("   OR")
-        print("3. Copy the contents and paste them into the Composer")
+        print("1. EASIEST: Paste the content directly into the Composer (it's already in your clipboard)")
+        print("2. Drag and drop the file from the Explorer into the Composer")
+        print("3. Right-click on the file in the Explorer and select 'Add to Composer' (if available)")
+            
     except Exception as e:
         print(f"Error opening file in editor: {e}")
 
