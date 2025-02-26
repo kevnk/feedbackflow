@@ -148,6 +148,17 @@
         "reveal": "always",
         "panel": "new"
       }
+    },
+    {
+      "label": "Start MCP Server for Cursor",
+      "type": "shell",
+      "command": "npx ff-mcp start --cursor",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "isBackground": true
     }
   ]
 } 

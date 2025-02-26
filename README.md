@@ -387,3 +387,165 @@ This creates a powerful self-improving system where the AI can continuously refi
 
 For more detailed information about the MCP integration and Cursor setup, see [MCP_README.md](MCP_README.md).
 
+## Using with npx
+
+FeedbackFlow can be used directly with `npx` without installing it globally:
+
+```bash
+# Show help
+npx feedbackflow --help
+
+# Read feedback
+npx feedbackflow read
+
+# Clear feedback
+npx feedbackflow clear
+
+# Add feedback to Cursor composer
+npx feedbackflow add-to-composer
+
+# MCP commands
+npx feedbackflow mcp start
+npx feedbackflow mcp stop
+npx feedbackflow mcp cursor
+```
+
+## Using with uv (Recommended for Python Users)
+
+Since FeedbackFlow is primarily a Python project, you can also install and use it with `uv`, the fast Python package installer:
+
+```bash
+# Install with uv
+python install_with_uv.py
+```
+
+Or using npm:
+```bash
+npm run install-with-uv
+```
+
+After installation with `uv`, you can use FeedbackFlow from anywhere:
+
+```bash
+# Show help
+feedbackflow --help
+
+# Read feedback
+feedbackflow read
+
+# MCP commands
+feedbackflow mcp start --cursor
+```
+
+## Global Installation
+
+You can install FeedbackFlow globally to use it without `npx`:
+
+```bash
+# Install globally
+npm run install-global
+
+# Or manually
+npm install -g .
+```
+
+After global installation, you can use FeedbackFlow from anywhere:
+
+```bash
+feedbackflow --help
+feedbackflow read
+feedbackflow mcp start --cursor
+```
+
+### Adding to Cursor's MCP Settings
+
+You can add FeedbackFlow to Cursor's MCP settings in two ways:
+
+#### Method 1: Using the Cursor UI
+
+1. Go to `Cursor Settings` > `MCP`
+2. Click "Add New MCP Server"
+3. Fill out the form with the following information:
+
+**For the stdio transport (recommended):**
+- **Name**: FeedbackFlow
+- **Type**: command
+- **Command**: `npx ff-mcp start --cursor` or if you've installed FeedbackFlow globally: `feedbackflow mcp start --cursor`
+
+**IMPORTANT**: If using a direct path to the script instead of npx, you MUST use an absolute path:
+- **Command**: `/absolute/path/to/ff-mcp` (not `./ff-mcp`)
+- **Args**: `start --cursor`
+
+You can find the absolute path using:
+```bash
+which ff-mcp  # On macOS/Linux
+where ff-mcp  # On Windows
+```
+
+**OR if you prefer using the SSE transport:**
+- **Name**: FeedbackFlow
+- **Type**: sse
+- **URL**: `http://localhost:8080`
+
+For more detailed instructions and troubleshooting, see the [Cursor Integration section in MCP_README.md](MCP_README.md#setting-up-feedbackflow-in-cursor).
+
+#### Method 2: Editing Settings JSON
+
+Add the following to your Cursor settings JSON:
+
+```json
+"mcp.commands": {
+  "feedbackflow": {
+    "name": "FeedbackFlow",
+    "command": "npx",
+    "args": ["ff-mcp", "start", "--cursor"]
+  }
+}
+```
+
+### Troubleshooting MCP Integration
+
+If you encounter a "Failed to create client" error when adding FeedbackFlow to Cursor's MCP settings, try these solutions:
+
+1. **Use absolute paths**: When configuring the MCP server, use absolute paths instead of relative paths:
+   ```json
+   "mcp.commands": {
+     "feedbackflow": {
+       "name": "FeedbackFlow",
+       "command": "/absolute/path/to/feedbackflow",
+       "args": ["mcp", "start", "--cursor"]
+     }
+   }
+   ```
+
+2. **Restart Cursor**: After making configuration changes, restart Cursor completely.
+
+3. **Verify the server is running**: Make sure the FeedbackFlow MCP server is running before connecting:
+   ```bash
+   # Check if the server is running
+   feedbackflow mcp start --cursor
+   ```
+
+4. **Check Cursor logs**: Look for MCP-related errors in Cursor's logs:
+   - On macOS: Open Console app and search for "Cursor"
+   - On Windows: Check the Event Viewer
+   - On Linux: Check `~/.config/Cursor/logs/`
+
+5. **Verify permissions**: Ensure the FeedbackFlow executable has proper permissions.
+
+6. **Try the SSE transport**: If stdio transport isn't working, try the SSE transport instead:
+   ```json
+   "mcp.commands": {
+     "feedbackflow": {
+       "name": "FeedbackFlow",
+       "command": "feedbackflow",
+       "args": ["mcp", "start", "--transport", "sse", "--port", "8080"]
+     }
+   }
+   ```
+   Then connect using the URL `http://localhost:8080` in Cursor's MCP settings.
+
+7. **Run the server manually**: Start the MCP server in a separate terminal and connect to it using the SSE transport in Cursor.
+
+For more detailed troubleshooting, see the [MCP_README.md](MCP_README.md) file.
+

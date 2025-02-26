@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "feedbackflow"
+version = "1.0.0"
+description = "A Chrome extension that enables AI-driven development through feedback collection and MCP integration with Cursor IDE"
+readme = "README.md"
+authors = [
+    {name = "FeedbackFlow Team"}
+]
+requires-python = ">=3.6"
+dependencies = [
+    "pillow",
+    "mcp>=0.1.0",
+]
+
+[project.scripts]
+feedbackflow = "feedbackflow.cli:main"
+
+[tool.setuptools]
+packages = ["feedbackflow"] 

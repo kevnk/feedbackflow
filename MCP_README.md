@@ -81,8 +81,23 @@ FeedbackFlow MCP can be integrated with [Cursor IDE](https://cursor.sh/) to enab
    - Click "Add New MCP Server"
    - Configure with:
      - Name: FeedbackFlow
-     - Command: `/path/to/python /path/to/mcp_server.py --cursor`
-     - Or URL: `http://localhost:8080` (if using SSE transport)
+     - Type: command
+     - Command: `npx ff-mcp start --cursor` or if you've installed FeedbackFlow globally: `feedbackflow mcp start --cursor`
+
+   **⚠️ IMPORTANT**: If using a direct path to the script instead of npx, you MUST use an absolute path:
+     - Command: `/absolute/path/to/ff-mcp` (not `./ff-mcp`)
+     - Args: `start --cursor`
+
+   You can find the absolute path using:
+   ```bash
+   which ff-mcp  # On macOS/Linux
+   where ff-mcp  # On Windows
+   ```
+
+   **OR if you prefer using the SSE transport:**
+     - Name: FeedbackFlow
+     - Type: sse
+     - URL: `http://localhost:8080`
 
 3. **Verifying the Connection**:
    - In Cursor's Composer, try accessing a FeedbackFlow resource
@@ -347,4 +362,216 @@ If you encounter issues with the MCP server:
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - [MCP Specification](https://github.com/modelcontextprotocol/specification)
-- [Cursor MCP Documentation](https://docs.cursor.com/context/model-context-protocol) 
+- [Cursor MCP Documentation](https://docs.cursor.com/context/model-context-protocol)
+
+## Using FeedbackFlow with npx
+
+FeedbackFlow can be used directly with `npx` without installing it globally. This makes it easy to integrate with Cursor's settings MCP section.
+
+```bash
+# Start the MCP server with npx
+npx ff-mcp start
+
+# Start for Cursor integration
+npx ff-mcp start --cursor
+```
+
+## Using FeedbackFlow with uv (Recommended for Python Users)
+
+Since FeedbackFlow is primarily a Python project, you can also install and use it with `uv`, the fast Python package installer.
+
+### Installation
+
+```bash
+# Install with uv
+python install_with_uv.py
+
+# Or run the npm script
+npm run install-with-uv
+```
+
+### Basic Usage
+
+```bash
+# Show help
+feedbackflow --help
+
+# Read feedback
+feedbackflow read
+
+# Clear feedback
+feedbackflow clear
+
+# Add feedback to Cursor composer
+feedbackflow add-to-composer
+```
+
+### MCP Commands
+
+```bash
+# Start MCP server
+feedbackflow mcp start
+
+# Start MCP server with specific options
+feedbackflow mcp start --transport sse --port 8080 --cursor
+
+# Stop MCP server
+feedbackflow mcp stop
+
+# Setup Cursor MCP integration
+feedbackflow mcp cursor
+```
+
+### Adding to Cursor's MCP Settings
+
+You can add FeedbackFlow to Cursor's MCP settings in two ways:
+
+#### Method 1: Using the Cursor UI
+
+1. Go to `Cursor Settings` > `Features` > `MCP Servers`
+2. Click on the `+ Add New MCP Server` button
+3. Fill out the form with the following information:
+
+**For the stdio transport (recommended):**
+- **Name**: FeedbackFlow
+- **Type**: stdio
+- **Command**: `npx ff-mcp start --cursor` or if you've installed FeedbackFlow globally: `feedbackflow mcp start --cursor`
+
+**⚠️ IMPORTANT**: If using a direct path to the script instead of npx, you MUST use an absolute path:
+- **Command**: `/absolute/path/to/ff-mcp` (not `./ff-mcp`)
+- **Args**: `start --cursor`
+
+You can find the absolute path using:
+```bash
+which ff-mcp  # On macOS/Linux
+where ff-mcp  # On Windows
+```
+
+**OR if you prefer using the SSE transport:**
+- **Name**: FeedbackFlow
+- **Type**: sse
+- **URL**: `http://localhost:8080`
+
+After adding the MCP server, it should appear in your list of MCP servers. You might need to press the refresh button in the top right corner of the MCP server section to populate the tool list.
+
+#### Method 2: Editing Settings JSON
+
+Add the following to your Cursor settings JSON:
+
+```json
+"mcp.commands": {
+  "feedbackflow": {
+    "name": "FeedbackFlow",
+    "command": "npx",
+    "args": ["ff-mcp", "start", "--cursor"]
+  }
+}
+```
+
+**⚠️ IMPORTANT**: If using a direct path to the script instead of npx, you MUST use an absolute path:
+```json
+"mcp.commands": {
+  "feedbackflow": {
+    "name": "FeedbackFlow",
+    "command": "/absolute/path/to/ff-mcp",
+    "args": ["start", "--cursor"]
+  }
+}
+```
+
+Relative paths like `./ff-mcp` will NOT work in Cursor's MCP settings.
+
+#### Project-Specific Configuration
+
+You can also configure FeedbackFlow as a project-specific MCP server by creating a `.cursor/mcp.json` file in your project root:
+
+```json
+{
+  "mcpServers": {
+    "feedbackflow": {
+      "command": "feedbackflow",
+      "args": ["mcp", "start", "--cursor"]
+    }
+  }
+}
+```
+
+This will allow you to start the FeedbackFlow MCP server directly from Cursor's MCP menu.
+
+## Troubleshooting MCP Integration Issues
+
+### "Failed to create client" Error
+
+If you encounter a "Failed to create client" error when adding FeedbackFlow to Cursor's MCP settings, follow this debugging workflow:
+
+1. **Use absolute paths**:
+   - **This is critical**: Always use absolute paths in your MCP configuration. Relative paths like `./ff-mcp` will NOT work.
+   ```json
+   "mcp.commands": {
+     "feedbackflow": {
+       "name": "FeedbackFlow",
+       "command": "/absolute/path/to/ff-mcp",
+       "args": ["start", "--cursor"]
+     }
+   }
+   ```
+   - You can find the absolute path to the ff-mcp executable by running:
+   ```bash
+   which ff-mcp  # On macOS/Linux
+   where ff-mcp  # On Windows
+   ```
+
+2. **Restart after configuration changes**:
+   - Always restart the MCP server after making any configuration changes
+   - Restart Cursor completely (not just reload window)
+
+3. **Check server availability**:
+   - Verify the MCP server is running and accessible before connecting
+   - Test the server manually:
+   ```bash
+   # Start the server in a terminal
+   feedbackflow mcp start --cursor
+   ```
+   - Look for any error messages in the terminal output
+
+4. **Verify transport configuration**:
+   - For stdio transport: Ensure the command is executable and properly formatted
+   - For SSE transport: Verify the server is running on the specified port
+   - Try switching transport methods if one isn't working
+
+5. **Check Cursor logs**:
+   - Examine Cursor's logs for detailed error information:
+     - On macOS: `~/Library/Application Support/Cursor/logs/`
+     - On Windows: `%APPDATA%\Cursor\logs\`
+     - On Linux: `~/.config/Cursor/logs/`
+   - Look for entries containing "MCP" or "Failed to create client"
+
+6. **Test with a simple MCP server**:
+   - Try connecting to a known working MCP server to verify Cursor's MCP functionality
+   - The MCP quickstart example can be used for testing: [MCP Quickstart](https://github.com/modelcontextprotocol/quickstart)
+
+7. **Verify network settings**:
+   - For SSE transport, ensure no firewall or network settings are blocking the connection
+   - Try using localhost (127.0.0.1) instead of a hostname
+
+8. **Check for conflicting processes**:
+   - Ensure no other process is using the same port (default 8080)
+   - Use a different port if needed:
+   ```bash
+   feedbackflow mcp start --cursor --port 8081
+   ```
+
+9. **Permissions issues**:
+   - Ensure the FeedbackFlow executable has proper execution permissions
+   - On macOS/Linux: `chmod +x /path/to/feedbackflow`
+
+10. **Manual server and connection**:
+    - Start the MCP server manually in a terminal:
+    ```bash
+    feedbackflow mcp start --transport sse --port 8080
+    ```
+    - Then in Cursor, add an MCP server with:
+      - Type: SSE
+      - URL: http://localhost:8080
+
+If you continue to experience issues, please check the Cursor logs for specific error messages and consult the [Cursor MCP Documentation](https://docs.cursor.com/context/model-context-protocol) for additional troubleshooting steps. 

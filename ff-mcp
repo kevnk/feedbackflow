@@ -119,9 +119,11 @@ def setup_cursor():
     print("3. Click 'Add New MCP Server'")
     print("4. Use the following settings:")
     print("   - Name: FeedbackFlow")
-    print(f"   - Command: {sys.executable} {os.path.abspath(mcp_script)} --cursor")
+    print("   - Type: stdio")
+    print(f"   - Command: npx ff-mcp start --cursor")
     print("\nAlternatively, you can use the SSE transport with:")
     print("   - Name: FeedbackFlow")
+    print("   - Type: sse")
     print("   - URL: http://localhost:8080")
     
     # Ask if user wants to start the server now
