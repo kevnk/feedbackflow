@@ -4,6 +4,23 @@ document.addEventListener('DOMContentLoaded', function() {
   const clearButton = document.getElementById('clear-feedback');
   const statusDiv = document.getElementById('status');
 
+  // Detect OS and update button text with appropriate key symbols
+  function updateButtonText() {
+    // Check if macOS (Darwin)
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0 || 
+                 navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+    
+    // Use symbols for both modifier key and Enter key
+    // ⌘ for Mac, ⌃ for Windows/Linux, and ↵ for Enter
+    const modKey = isMac ? '&#8984;' : '&#8963;';
+    
+    // Update button text - using HTML entities for both symbols
+    sendButton.innerHTML = `Send Feedback ${modKey}&#8629;`;
+  }
+
+  // Update button text on load
+  updateButtonText();
+
   // Get the current tab information
   async function getCurrentTab() {
     const queryOptions = { active: true, currentWindow: true };
@@ -11,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
     return tab;
   }
 
-  // Send feedback when button is clicked
-  sendButton.addEventListener('click', async function() {
+  // Function to send feedback
+  async function sendFeedback() {
     const feedback = feedbackText.value.trim();
     
     if (!feedback) {
@@ -45,6 +62,18 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
       statusDiv.textContent = 'Error: ' + error.message;
       statusDiv.className = 'status error';
+    }
+  }
+
+  // Send feedback when button is clicked
+  sendButton.addEventListener('click', sendFeedback);
+
+  // Add keyboard shortcut (Cmd/Ctrl + Enter) to send feedback
+  feedbackText.addEventListener('keydown', function(event) {
+    // Check if it's Cmd/Ctrl + Enter
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+      event.preventDefault();
+      sendFeedback();
     }
   });
 

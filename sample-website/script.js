@@ -3,6 +3,23 @@ document.addEventListener('DOMContentLoaded', function() {
   const sendButton = document.getElementById('send-feedback');
   const statusDiv = document.getElementById('status');
   
+  // Detect OS and update button text with appropriate key symbols
+  function updateButtonText() {
+    // Check if macOS (Darwin)
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0 || 
+                 navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+    
+    // Use symbols for both modifier key and Enter key
+    // ⌘ for Mac, ⌃ for Windows/Linux, and ↵ for Enter
+    const modKey = isMac ? '&#8984;' : '&#8963;';
+    
+    // Update button text - using HTML entities for both symbols
+    sendButton.innerHTML = `Send Feedback ${modKey}&#8629;`;
+  }
+
+  // Update button text on load
+  updateButtonText();
+  
   function checkFeedbackLoopAPI() {
     if (window.FeedbackLoop) {
       statusDiv.textContent = 'FeedbackLoop extension is active.';
@@ -33,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 1000);
   
-  // Send feedback when button is clicked
-  sendButton.addEventListener('click', function() {
+  // Function to send feedback
+  function sendFeedback() {
     const feedback = feedbackText.value.trim();
     
     if (!feedback) {
@@ -57,6 +74,18 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       statusDiv.textContent = 'FeedbackLoop extension is not installed or not active.';
       statusDiv.className = 'status error';
+    }
+  }
+  
+  // Send feedback when button is clicked
+  sendButton.addEventListener('click', sendFeedback);
+  
+  // Add keyboard shortcut (Cmd/Ctrl + Enter) to send feedback
+  feedbackText.addEventListener('keydown', function(event) {
+    // Check if it's Cmd/Ctrl + Enter
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+      event.preventDefault();
+      sendFeedback();
     }
   });
   
