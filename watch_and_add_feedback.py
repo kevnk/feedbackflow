@@ -192,7 +192,7 @@ def open_with_system_default(file_path):
 
 def add_feedback_to_composer(editor=None):
     """
-    Copy the feedback.log file to a temporary file in the workspace and open it in the editor.
+    Open the feedback.log file directly in the editor.
     This makes it easy to add the feedback log to the Composer context.
     
     Args:
@@ -209,20 +209,6 @@ def add_feedback_to_composer(editor=None):
     if not os.path.exists(log_path):
         print(f"Feedback log file not found at: {log_path}")
         print("Make sure the Feedback Flow extension is installed and has been used.")
-        return
-    
-    # Get the current workspace directory
-    workspace_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    # Create a temporary file in the workspace
-    temp_file_path = os.path.join(workspace_dir, 'feedback_log_for_composer.txt')
-    
-    # Copy the feedback log to the temporary file
-    try:
-        shutil.copy2(log_path, temp_file_path)
-        print(f"Copied feedback log to: {temp_file_path}")
-    except Exception as e:
-        print(f"Error copying feedback log: {e}")
         return
     
     # Read the content of the feedback log
@@ -263,29 +249,30 @@ def add_feedback_to_composer(editor=None):
         if ide_name and editor_cmd:
             print(f"Using {ide_name} to open feedback log...")
             try:
-                cmd = [editor_cmd, '-r', temp_file_path]
+                cmd = [editor_cmd, '-r', log_path]
                 subprocess.run(cmd)
                 print(f"\nFeedback log has been opened in {ide_name}.")
             except FileNotFoundError:
                 print(f"Could not open with {ide_name}. Trying system default...")
-                if open_with_system_default(temp_file_path):
+                if open_with_system_default(log_path):
                     print("\nFeedback log has been opened with the system's default text editor.")
         else:
             # No IDE detected or no command available, use system default
             print("Opening with system default...")
-            if open_with_system_default(temp_file_path):
+            if open_with_system_default(log_path):
                 print("\nFeedback log has been opened with the system's default text editor.")
             else:
                 print("Could not open the file. Please open it manually.")
-                print(f"File location: {temp_file_path}")
+                print(f"File location: {log_path}")
         
         print("\nTo add it to the Composer context:")
         print("1. EASIEST: Paste the content directly into the Composer (it's already in your clipboard)")
         print("2. Drag and drop the file from the Explorer into the Composer")
         print("3. Right-click on the file in the Explorer and select 'Add to Composer' (if available)")
-            
     except Exception as e:
-        print(f"Error opening file in editor: {e}")
+        print(f"Error opening file: {e}")
+        print(f"File location: {log_path}")
+        print("Please open it manually.")
 
 def watch_and_add_feedback(editor=None):
     """

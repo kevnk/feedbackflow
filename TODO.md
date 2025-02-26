@@ -10,5 +10,5 @@
 	(anonymous) @ content.js:38Understand this errorAI
 	true
 	```
-- [ ] instead of creating a copy of the feedback.log, can we just open the ~/.feedbackflow/feedback.log file in the editor?
+- [x] instead of creating a copy of the feedback.log, can we just open the ~/.feedbackflow/feedback.log file in the editor?
 - [ ] is native-host/com.feedbackflow.host.json created when the extension is installed, if so, it probably should be in the repo. If not, we shouldn't use my username in the path.
