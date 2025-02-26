@@ -9,13 +9,13 @@ def update_extension_id(extension_id):
     chrome_manifest_path = os.path.join(
         str(Path.home()),
         'Library', 'Application Support', 'Google', 'Chrome', 'NativeMessagingHosts',
-        'com.feedbackloop.host.json'
+        'com.feedbackflow.host.json'
     )
     
     # Path to the native messaging host manifest in the project directory
     project_manifest_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        'native-host', 'com.feedbackloop.host.json'
+        'native-host', 'com.feedbackflow.host.json'
     )
     
     # Update both manifests

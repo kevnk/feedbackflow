@@ -10,7 +10,7 @@ def check_log_file():
     home_dir = str(Path.home())
     
     # Get the path to the feedback log file
-    log_path = os.path.join(home_dir, '.feedbackloop', 'feedback.log')
+    log_path = os.path.join(home_dir, '.feedbackflow', 'feedback.log')
     
     # Check if the file exists
     if not os.path.exists(log_path):
@@ -34,14 +34,14 @@ def check_native_host():
     
     if system == 'Darwin':  # macOS
         host_dir = os.path.join(str(Path.home()), 'Library', 'Application Support', 'Google', 'Chrome', 'NativeMessagingHosts')
-        manifest_path = os.path.join(host_dir, 'com.feedbackloop.host.json')
+        manifest_path = os.path.join(host_dir, 'com.feedbackflow.host.json')
     elif system == 'Linux':
         host_dir = os.path.join(str(Path.home()), '.config', 'google-chrome', 'NativeMessagingHosts')
-        manifest_path = os.path.join(host_dir, 'com.feedbackloop.host.json')
+        manifest_path = os.path.join(host_dir, 'com.feedbackflow.host.json')
     elif system == 'Windows':
         # On Windows, we can't easily check the registry, so we'll just check if the directory exists
         host_dir = os.path.join(os.environ.get('LOCALAPPDATA', ''), 'Google', 'Chrome', 'User Data', 'NativeMessagingHosts')
-        manifest_path = os.path.join(host_dir, 'com.feedbackloop.host.json')
+        manifest_path = os.path.join(host_dir, 'com.feedbackflow.host.json')
     else:
         print(f"❌ Unsupported operating system: {system}")
         return False
@@ -61,7 +61,7 @@ def check_native_host():
 
 def main():
     """Main function to check if the extension is working correctly."""
-    print("=== FeedbackLoop Extension Check ===\n")
+    print("=== Feedback Flow Extension Check ===\n")
     
     # Check if the native host is installed
     native_host_ok = check_native_host()
@@ -72,10 +72,10 @@ def main():
     # Print summary
     print("\n=== Summary ===")
     if native_host_ok and log_file_ok:
-        print("✅ The FeedbackLoop extension appears to be set up correctly.")
+        print("✅ The Feedback Flow extension appears to be set up correctly.")
         print("   You can now use the extension to send feedback from your browser.")
     else:
-        print("❌ There are issues with the FeedbackLoop extension setup.")
+        print("❌ There are issues with the Feedback Flow extension setup.")
         print("   Please check the errors above and try running the setup script again:")
         print("   python setup.py")
     

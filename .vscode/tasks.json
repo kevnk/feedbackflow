@@ -36,7 +36,7 @@
     {
       "label": "Open Feedback Log for Composer",
       "type": "shell",
-      "command": "python -c \"import os, pathlib; home = str(pathlib.Path.home()); log_path = os.path.join(home, '.feedbackloop', 'feedback.log'); print(f'Opening {log_path}'); os.system(f'code -r \"{log_path}\"') if os.path.exists(log_path) else print('Feedback log not found at ' + log_path)\"",
+      "command": "python -c \"import os, pathlib; home = str(pathlib.Path.home()); log_path = os.path.join(home, '.feedbackflow', 'feedback.log'); print(f'Opening {log_path}'); os.system(f'code -r \"{log_path}\"') if os.path.exists(log_path) else print('Feedback log not found at ' + log_path)\"",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -103,6 +103,51 @@
         "panel": "new"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Add Feedback to Composer (Cursor)",
+      "type": "shell",
+      "command": "python ${workspaceFolder}/add_feedback_to_composer.py --editor cursor",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Watch and Add Feedback (Cursor)",
+      "type": "shell",
+      "command": "python ${workspaceFolder}/watch_and_add_feedback.py --editor cursor",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "isBackground": true
+    },
+    {
+      "label": "Add Feedback to Composer (VS Code)",
+      "type": "shell",
+      "command": "python ${workspaceFolder}/add_feedback_to_composer.py --editor vscode",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Add Feedback to Composer (System Default)",
+      "type": "shell",
+      "command": "python ${workspaceFolder}/add_feedback_to_composer.py --editor system",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 } 

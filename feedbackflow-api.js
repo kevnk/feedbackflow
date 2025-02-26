@@ -1,5 +1,5 @@
-// Define the FeedbackLoop API in the global scope
-window.FeedbackLoop = {
+// Define the FeedbackFlow API in the global scope
+window.FeedbackFlow = {
   // Verbosity flag - set to false to enable detailed logging
   verbose: false,
   
@@ -19,13 +19,13 @@ window.FeedbackLoop = {
   // Enable verbose logging
   enableVerbose: function() {
     this.verbose = true;
-    this.log('Verbose logging enabled for FeedbackLoop');
+    this.log('Verbose logging enabled for Feedback Flow');
     return true;
   },
   
   // Disable verbose logging
   disableVerbose: function() {
-    this.log('Verbose logging disabled for FeedbackLoop');
+    this.log('Verbose logging disabled for Feedback Flow');
     this.verbose = false;
     return true;
   },
@@ -33,18 +33,18 @@ window.FeedbackLoop = {
   sendFeedback: function(feedback) {
     try {
       // Use a custom event to communicate with the content script
-      const customEvent = new CustomEvent('feedbackloop-send', { 
+      const customEvent = new CustomEvent('feedbackflow-send', { 
         detail: { feedback: feedback } 
       });
       window.dispatchEvent(customEvent);
       
       // Set up a listener for the response
       const responseHandler = function(event) {
-        if (event.data && event.data.type === 'FEEDBACK_LOOP_RESPONSE') {
+        if (event.data && event.data.type === 'FEEDBACK_FLOW_RESPONSE') {
           if (event.data.success) {
-            window.FeedbackLoop.log('Feedback sent successfully');
+            window.FeedbackFlow.log('Feedback sent successfully');
             if (event.data.warning) {
-              window.FeedbackLoop.log('Warning: ' + event.data.warning, 'warn');
+              window.FeedbackFlow.log('Warning: ' + event.data.warning, 'warn');
             }
           } else if (event.data.error) {
             // Always show errors, even in non-verbose mode
@@ -75,15 +75,15 @@ window.addEventListener('message', function(event) {
   if (event.source !== window) return;
 
   // Check if the message is for toggling verbose mode
-  if (event.data.type && event.data.type === 'FEEDBACK_LOOP_SET_VERBOSE') {
+  if (event.data.type && event.data.type === 'FEEDBACK_FLOW_SET_VERBOSE') {
     if (event.data.value) {
-      window.FeedbackLoop.enableVerbose();
+      window.FeedbackFlow.enableVerbose();
     } else {
-      window.FeedbackLoop.disableVerbose();
+      window.FeedbackFlow.disableVerbose();
     }
   }
 });
 
 // Notify that the API is ready
-window.dispatchEvent(new CustomEvent('feedbackloop-ready'));
-window.FeedbackLoop.log('FeedbackLoop API is ready in page context'); 
+window.dispatchEvent(new CustomEvent('feedbackflow-ready'));
+window.FeedbackFlow.log('Feedback Flow API is ready in page context'); 

@@ -6,10 +6,10 @@ const path = require('path');
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-    console.log('FeedbackLoop extension is now active');
+    console.log('Feedback Flow extension is now active');
 
     // Register the command to add feedback log to composer
-    let disposable = vscode.commands.registerCommand('feedbackloop.addToComposer', function () {
+    let disposable = vscode.commands.registerCommand('feedbackflow.addToComposer', function () {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (!workspaceFolders) {
             vscode.window.showErrorMessage('No workspace folder is open');

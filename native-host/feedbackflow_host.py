@@ -37,8 +37,8 @@ def main():
     # Get the home directory
     home_dir = str(Path.home())
     
-    # Create the .feedbackloop directory if it doesn't exist
-    feedback_dir = os.path.join(home_dir, '.feedbackloop')
+    # Create the .feedbackflow directory if it doesn't exist
+    feedback_dir = os.path.join(home_dir, '.feedbackflow')
     os.makedirs(feedback_dir, exist_ok=True)
     
     # Process messages from Chrome
@@ -48,7 +48,7 @@ def main():
             
             if message.get('action') == 'writeFeedback':
                 # Get the log file path
-                log_path = os.path.join(home_dir, message.get('path', '.feedbackloop/feedback.log'))
+                log_path = os.path.join(home_dir, message.get('path', '.feedbackflow/feedback.log'))
                 
                 # Ensure the directory exists
                 os.makedirs(os.path.dirname(log_path), exist_ok=True)
@@ -61,11 +61,11 @@ def main():
                 send_message({'success': True})
             elif message.get('action') == 'clearFeedback':
                 # Get the log file path
-                log_path = os.path.join(home_dir, message.get('path', '.feedbackloop/feedback.log'))
+                log_path = os.path.join(home_dir, message.get('path', '.feedbackflow/feedback.log'))
                 
                 # Clear the log file by opening it in write mode
                 with open(log_path, 'w', encoding='utf-8') as f:
-                    f.write("# FeedbackLoop Log File - Cleared on " + time.strftime('%Y-%m-%d %H:%M:%S') + "\n")
+                    f.write("# Feedback Flow Log File - Cleared on " + time.strftime('%Y-%m-%d %H:%M:%S') + "\n")
                 
                 # Send success response
                 send_message({'success': True})

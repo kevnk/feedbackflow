@@ -10,12 +10,12 @@ def read_feedback_log():
     home_dir = str(Path.home())
     
     # Get the path to the feedback log file
-    log_path = os.path.join(home_dir, '.feedbackloop', 'feedback.log')
+    log_path = os.path.join(home_dir, '.feedbackflow', 'feedback.log')
     
     # Check if the file exists
     if not os.path.exists(log_path):
         print(f"Feedback log file not found at: {log_path}")
-        print("Make sure the FeedbackLoop extension is installed and has been used.")
+        print("Make sure the Feedback Flow extension is installed and has been used.")
         return
     
     # Read and print the contents of the log file
@@ -29,12 +29,12 @@ def watch_feedback_log():
     home_dir = str(Path.home())
     
     # Get the path to the feedback log file
-    log_path = os.path.join(home_dir, '.feedbackloop', 'feedback.log')
+    log_path = os.path.join(home_dir, '.feedbackflow', 'feedback.log')
     
     # Check if the file exists
     if not os.path.exists(log_path):
         print(f"Feedback log file not found at: {log_path}")
-        print("Make sure the FeedbackLoop extension is installed and has been used.")
+        print("Make sure the Feedback Flow extension is installed and has been used.")
         return
     
     # Get the current size of the file

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "FeedbackLoop",
+  "name": "Feedback Flow",
   "version": "1.0",
   "description": "Send feedback from your website to your AI assistant",
   "permissions": ["storage", "activeTab", "scripting", "tabs", "nativeMessaging"],
@@ -24,7 +24,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["feedbackloop-api.js"],
+      "resources": ["feedbackflow-api.js"],
       "matches": ["<all_urls>"]
     }
   ],

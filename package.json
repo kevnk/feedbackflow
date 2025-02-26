@@ -1,9 +1,9 @@
 {
-  "name": "feedbackloop",
-  "displayName": "FeedbackLoop",
+  "name": "feedbackflow",
+  "displayName": "Feedback Flow",
   "description": "A Chrome extension that allows you to send feedback from your website to your AI assistant",
   "version": "1.0.0",
-  "publisher": "feedbackloop",
+  "publisher": "feedbackflow",
   "engines": {
     "vscode": "^1.51.0"
   },
@@ -15,8 +15,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "feedbackloop.addToComposer",
-        "title": "FeedbackLoop: Add Feedback Log to Composer"
+        "command": "feedbackflow.addToComposer",
+        "title": "Feedback Flow: Add Feedback Log to Composer"
       }
     ]
   },

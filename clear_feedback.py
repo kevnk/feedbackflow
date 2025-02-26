@@ -9,18 +9,18 @@ def clear_feedback_log():
     home_dir = str(Path.home())
     
     # Get the path to the feedback log file
-    log_path = os.path.join(home_dir, '.feedbackloop', 'feedback.log')
+    log_path = os.path.join(home_dir, '.feedbackflow', 'feedback.log')
     
     # Check if the file exists
     if not os.path.exists(log_path):
         print(f"Feedback log file not found at: {log_path}")
-        print("Make sure the FeedbackLoop extension is installed and has been used.")
+        print("Make sure the Feedback Flow extension is installed and has been used.")
         return False
     
     try:
         # Clear the log file by opening it in write mode
         with open(log_path, 'w', encoding='utf-8') as f:
-            f.write("# FeedbackLoop Log File - Cleared on " + time.strftime('%Y-%m-%d %H:%M:%S') + "\n")
+            f.write("# Feedback Flow Log File - Cleared on " + time.strftime('%Y-%m-%d %H:%M:%S') + "\n")
         print(f"Feedback log cleared successfully at: {log_path}")
         return True
     except Exception as e:

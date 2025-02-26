@@ -46,11 +46,11 @@ def setup_extension():
     print("1. Open Chrome and navigate to chrome://extensions/")
     print("2. Enable 'Developer mode' in the top-right corner")
     print("3. Click 'Load unpacked' and select this directory")
-    print("4. The FeedbackLoop extension should now appear in your extensions list")
+    print("4. The Feedback Flow extension should now appear in your extensions list")
 
 def main():
     """Main setup function."""
-    print("=== FeedbackLoop Extension Setup ===\n")
+    print("=== Feedback Flow Extension Setup ===\n")
     
     # Check Python version
     check_python_version()
@@ -67,7 +67,7 @@ def main():
     # Set up extension
     setup_extension()
     
-    print("\nSetup complete! You can now use the FeedbackLoop extension.")
+    print("\nSetup complete! You can now use the Feedback Flow extension.")
 
 if __name__ == "__main__":
     main() 

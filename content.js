@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     verboseLog("Setting verbose mode to: " + request.value);
     // This will be used to communicate with the page script
     window.postMessage({
-      type: 'FEEDBACK_LOOP_SET_VERBOSE',
+      type: 'FEEDBACK_FLOW_SET_VERBOSE',
       value: request.value
     }, '*');
     sendResponse({ success: true });
@@ -37,7 +37,7 @@ window.addEventListener('message', function(event) {
   if (event.source !== window) return;
 
   // Check if the message is from our expected format
-  if (event.data.type && event.data.type === 'FEEDBACK_LOOP') {
+  if (event.data.type && event.data.type === 'FEEDBACK_FLOW') {
     // Send the feedback to the background script
     try {
       chrome.runtime.sendMessage({
@@ -49,7 +49,7 @@ window.addEventListener('message', function(event) {
       }, function(response) {
         // Optionally send a response back to the page
         window.postMessage({
-          type: 'FEEDBACK_LOOP_RESPONSE',
+          type: 'FEEDBACK_FLOW_RESPONSE',
           success: response && response.success,
           warning: response && response.warning
         }, '*');
@@ -57,7 +57,7 @@ window.addEventListener('message', function(event) {
     } catch (error) {
       console.error('Error sending feedback:', error);
       window.postMessage({
-        type: 'FEEDBACK_LOOP_RESPONSE',
+        type: 'FEEDBACK_FLOW_RESPONSE',
         success: false,
         error: error.message
       }, '*');
@@ -66,7 +66,7 @@ window.addEventListener('message', function(event) {
 });
 
 // Listen for the custom event from the page
-window.addEventListener('feedbackloop-send', function(event) {
+window.addEventListener('feedbackflow-send', function(event) {
   if (event.detail && event.detail.feedback) {
     // Forward the feedback to the background script
     try {
@@ -79,7 +79,7 @@ window.addEventListener('feedbackloop-send', function(event) {
       }, function(response) {
         // Send a response back to the page
         window.postMessage({
-          type: 'FEEDBACK_LOOP_RESPONSE',
+          type: 'FEEDBACK_FLOW_RESPONSE',
           success: response && response.success,
           warning: response && response.warning
         }, '*');
@@ -87,7 +87,7 @@ window.addEventListener('feedbackloop-send', function(event) {
     } catch (error) {
       console.error('Error sending feedback:', error);
       window.postMessage({
-        type: 'FEEDBACK_LOOP_RESPONSE',
+        type: 'FEEDBACK_FLOW_RESPONSE',
         success: false,
         error: error.message
       }, '*');
@@ -95,10 +95,10 @@ window.addEventListener('feedbackloop-send', function(event) {
   }
 });
 
-// Inject the FeedbackLoop API script
-function injectFeedbackLoopAPI() {
-  // Get the URL to the feedbackloop-api.js file
-  const apiScriptURL = chrome.runtime.getURL('feedbackloop-api.js');
+// Inject the FeedbackFlow API script
+function injectFeedbackFlowAPI() {
+  // Get the URL to the feedbackflow-api.js file
+  const apiScriptURL = chrome.runtime.getURL('feedbackflow-api.js');
   
   // Create a script element
   const script = document.createElement('script');
@@ -107,23 +107,23 @@ function injectFeedbackLoopAPI() {
   
   // Log when the script is loaded
   script.onload = function() {
-    verboseLog('FeedbackLoop API script loaded successfully');
+    verboseLog('FeedbackFlow API script loaded successfully');
   };
   
   // Log any errors
   script.onerror = function() {
-    console.error('Failed to load FeedbackLoop API script');
+    console.error('Failed to load FeedbackFlow API script');
   };
   
   // Append the script to the document
   (document.head || document.documentElement).appendChild(script);
   
-  verboseLog('FeedbackLoop API script injection attempted: ' + apiScriptURL);
+  verboseLog('FeedbackFlow API script injection attempted: ' + apiScriptURL);
 }
 
 // Execute the injection as soon as possible
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', injectFeedbackLoopAPI);
+  document.addEventListener('DOMContentLoaded', injectFeedbackFlowAPI);
 } else {
-  injectFeedbackLoopAPI();
+  injectFeedbackFlowAPI();
 } 

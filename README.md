@@ -1,4 +1,4 @@
-# FeedbackLoop Chrome Extension
+# Feedback Flow Chrome Extension
 
 A Chrome extension that allows you to send feedback from your website to your AI assistant. The feedback is stored in a log file that can be easily accessed by Cursor or VS Code.
 
@@ -37,7 +37,7 @@ Alternatively, you can use the VS Code/Cursor task "Setup Extension" to run the 
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable "Developer mode" in the top-right corner
 4. Click "Load unpacked" and select the root directory of this project
-5. The FeedbackLoop extension should now appear in your extensions list
+5. The Feedback Flow extension should now appear in your extensions list
 
 #### 2. Install the Native Messaging Host
 
@@ -53,7 +53,7 @@ python native-host/install_host.py
 
 This will:
 - Install the native messaging host for Chrome
-- Create the `.feedbackloop` directory in your home folder
+- Create the `.feedbackflow` directory in your home folder
 - Create an empty `feedback.log` file
 
 After installing the extension, you need to update the native messaging host with your extension ID:
@@ -68,8 +68,8 @@ Replace `YOUR_EXTENSION_ID` with the ID of your extension, which you can find in
 
 If the automatic installation doesn't work:
 
-1. Update the `native-host/com.feedbackloop.host.json` file:
-   - Replace `REPLACE_WITH_ABSOLUTE_PATH` with the absolute path to the `feedbackloop_host.py` script
+1. Update the `native-host/com.feedbackflow.host.json` file:
+   - Replace `REPLACE_WITH_ABSOLUTE_PATH` with the absolute path to the `feedbackflow_host.py` script
    - After loading the extension, replace `REPLACE_WITH_EXTENSION_ID` with your extension ID
 
 2. Copy the manifest file to the appropriate location:
@@ -79,14 +79,14 @@ If the automatic installation doesn't work:
 
 3. Make the host script executable:
    ```bash
-   chmod +x native-host/feedbackloop_host.py
+   chmod +x native-host/feedbackflow_host.py
    ```
 
 ## Usage
 
 ### Using the Extension Popup
 
-1. Click on the FeedbackLoop extension icon in your browser
+1. Click on the Feedback Flow extension icon in your browser
 2. Type your feedback in the text area
 3. Click "Send Feedback"
 
@@ -95,17 +95,17 @@ If the automatic installation doesn't work:
 The extension injects a JavaScript API into every web page. You can use it like this:
 
 ```javascript
-// Check if the FeedbackLoop API is available
-if (window.FeedbackLoop) {
-  // Send feedback
-  window.FeedbackLoop.sendFeedback("Your feedback message here");
+// Check if the Feedback Flow API is available
+if (window.FeedbackFlow) {
+  // Send feedback to your AI assistant
+  window.FeedbackFlow.sendFeedback("Your feedback message here");
 }
 
 // Listen for responses
 window.addEventListener('message', function(event) {
   if (event.source !== window) return;
   
-  if (event.data.type && event.data.type === 'FEEDBACK_LOOP_RESPONSE') {
+  if (event.data.type && event.data.type === 'FEEDBACK_FLOW_RESPONSE') {
     console.log('Feedback sent:', event.data.success);
   }
 });
@@ -137,7 +137,7 @@ cd sample-website
 python -m http.server 8000
 ```
 
-Then open http://localhost:8000 in your browser to see a demonstration of how to use the FeedbackLoop API.
+Then open http://localhost:8000 in your browser to see a demonstration of how to use the Feedback Flow API.
 
 ## Troubleshooting
 
@@ -150,7 +150,7 @@ If the extension isn't working:
    
 2. Check if the native messaging host is installed correctly
 3. Look for errors in the Chrome extension's background page (inspect the extension)
-4. Check the error log in the `.feedbackloop` directory in your home folder
+4. Check the error log in the `.feedbackflow` directory in your home folder
 
 ### Native Messaging Issues
 
@@ -166,7 +166,7 @@ If you see a "Native messaging error" when sending feedback:
 3. Reload the extension after making any changes
 4. Verify that the native messaging host script is executable:
    ```bash
-   chmod +x native-host/feedbackloop_host.py
+   chmod +x native-host/feedbackflow_host.py
    ```
 
 ## Using Feedback with Cursor Composer

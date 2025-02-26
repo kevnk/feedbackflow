@@ -1,22 +1,9 @@
-# FeedbackLoop Log File - Cleared on 2025-02-26 07:57:34
+Sample feedback entry 1
+Sample feedback entry 2
 
 -------------------------------
-Timestamp: 2025-02-26T14:34:55.397Z
+Timestamp: 2025-02-26T15:38:09.151Z
 URL: chrome://extensions/
 Title: Extensions
-Feedback: Does this work
--------------------------------
-
--------------------------------
-Timestamp: 2025-02-26T14:38:49.752Z
-URL: chrome://extensions/
-Title: Extensions
-Feedback: wassup
--------------------------------
-
--------------------------------
-Timestamp: 2025-02-26T14:47:52.359Z
-URL: https://www.google.com/
-Title: Google
-Feedback: heyo
+Feedback: hi mam
 -------------------------------

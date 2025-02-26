@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Update button text on load
   updateButtonText();
   
-  function checkFeedbackLoopAPI() {
-    if (window.FeedbackLoop) {
-      statusDiv.textContent = 'FeedbackLoop extension is active.';
+  function checkFeedbackFlowAPI() {
+    if (window.FeedbackFlow) {
+      statusDiv.textContent = 'Feedback Flow extension is active.';
       statusDiv.className = 'status success';
       sendButton.disabled = false;
       return true;
     } else {
-      statusDiv.textContent = 'FeedbackLoop extension is not installed or not active.';
+      statusDiv.textContent = 'Feedback Flow extension is not installed or not active.';
       statusDiv.className = 'status error';
       sendButton.disabled = true;
       return false;
@@ -35,17 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Initial check for the API
-  checkFeedbackLoopAPI();
+  checkFeedbackFlowAPI();
   
   // Listen for the API readiness event
-  window.addEventListener('feedbackloop-ready', function() {
-    console.log('FeedbackLoop API is now ready');
-    checkFeedbackLoopAPI();
+  window.addEventListener('feedbackflow-ready', function() {
+    console.log('Feedback Flow API is now ready');
+    checkFeedbackFlowAPI();
   });
   
   // Periodically check for the API (in case the event is missed)
   const apiCheckInterval = setInterval(function() {
-    if (checkFeedbackLoopAPI()) {
+    if (checkFeedbackFlowAPI()) {
       clearInterval(apiCheckInterval);
     }
   }, 1000);
@@ -60,10 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
     
-    if (window.FeedbackLoop) {
+    if (window.FeedbackFlow) {
       try {
         // Send feedback using the API
-        window.FeedbackLoop.sendFeedback(feedback);
+        window.FeedbackFlow.sendFeedback(feedback);
         statusDiv.textContent = 'Sending feedback...';
         statusDiv.className = 'status';
       } catch (error) {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         statusDiv.className = 'status error';
       }
     } else {
-      statusDiv.textContent = 'FeedbackLoop extension is not installed or not active.';
+      statusDiv.textContent = 'Feedback Flow extension is not installed or not active.';
       statusDiv.className = 'status error';
     }
   }
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (event.source !== window) return;
     
     // Check if the message is from our expected format
-    if (event.data.type && event.data.type === 'FEEDBACK_LOOP_RESPONSE') {
+    if (event.data.type && event.data.type === 'FEEDBACK_FLOW_RESPONSE') {
       if (event.data.success) {
         statusDiv.textContent = 'Feedback sent successfully!';
         statusDiv.className = 'status success';
