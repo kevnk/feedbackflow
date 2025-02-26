@@ -23,11 +23,11 @@
     1. Merges with existing .cursorrules in both home directory and project directory
     2. Merges with existing .github/copilot-instructions.md in the project directory
 - [x] Add MCP functionality to this project where it makes sense — reference https://github.com/modelcontextprotocol/python-sdk
-- [ ] Refactor this project to make it easier to understand and maintain — add comments, improve variable names, etc.
+- [x] Refactor this project to make it easier to understand and maintain — add comments, improve variable names, etc.
 	- NOTE: Think through carefully and use the best solution for this kind of project
 		- if this were a distributed project, what would be the best way to structure it?
 		- would it be better to have a single feedbackflow-<platform> repo for each platform, with the platform-specific files in platform-specific directories or keep it all in one repo since nothing will work without the others?
-  - [ ] Move chrome extension files to a separate chrome-extension directory?
-	- [ ] Move MCP files to a separate mcp directory?
-	- [ ] Move scripts to a separate scripts directory maybe?
+  - [x] Move chrome extension files to a separate chrome-extension directory
+	- [x] Move MCP files to a separate mcp directory
+	- [x] Move scripts to a separate scripts directory
 - [ ] In all the cli prompts can you make them (Y/n) instead (defaulting to y)?

@@ -21,7 +21,7 @@ def create_mcp_service():
     """Create a service file for the MCP server on Linux/macOS."""
     if platform.system() == "Windows":
         print("Service creation is not supported on Windows.")
-        print("You can manually run the MCP server with: python mcp_server.py")
+        print("You can manually run the MCP server with: python mcp/mcp_server.py")
         return
     
     # Get the home directory
@@ -31,8 +31,9 @@ def create_mcp_service():
     service_dir = os.path.join(home_dir, '.config', 'systemd', 'user')
     os.makedirs(service_dir, exist_ok=True)
     
-    # Get the current directory
+    # Get the current directory and project root
     current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_dir, '..'))
     
     # Create the service file
     service_path = os.path.join(service_dir, 'feedbackflow-mcp.service')
@@ -60,7 +61,7 @@ WantedBy=default.target
         print("  systemctl --user start feedbackflow-mcp.service")
     except Exception as e:
         print(f"❌ Error creating service file: {e}")
-        print("You can manually run the MCP server with: python mcp_server.py")
+        print("You can manually run the MCP server with: python mcp/mcp_server.py")
 
 def main():
     """Main function to install MCP dependencies and set up the server."""
@@ -75,7 +76,7 @@ def main():
     
     print("\nMCP server setup complete!")
     print("\nYou can now run the MCP server with:")
-    print("  python mcp_server.py")
+    print("  python mcp/mcp_server.py")
     print("\nThis will allow AI assistants to access and interact with your feedback log.")
 
 if __name__ == "__main__":

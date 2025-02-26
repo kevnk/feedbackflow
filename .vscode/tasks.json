@@ -4,7 +4,7 @@
     {
       "label": "Read Feedback Log",
       "type": "shell",
-      "command": "python ${workspaceFolder}/read_feedback.py",
+      "command": "python ${workspaceFolder}/scripts/read_feedback.py",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -14,7 +14,7 @@
     {
       "label": "Watch Feedback Log",
       "type": "shell",
-      "command": "python ${workspaceFolder}/read_feedback.py --watch",
+      "command": "python ${workspaceFolder}/scripts/read_feedback.py --watch",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -25,7 +25,7 @@
     {
       "label": "Watch and Add Feedback to Composer",
       "type": "shell",
-      "command": "python ${workspaceFolder}/watch_and_add_feedback.py",
+      "command": "python ${workspaceFolder}/scripts/watch_and_add_feedback.py",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -46,7 +46,7 @@
     {
       "label": "Add Feedback Log to Composer",
       "type": "shell",
-      "command": "python ${workspaceFolder}/add_feedback_to_composer.py",
+      "command": "python ${workspaceFolder}/scripts/add_feedback_to_composer.py",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -56,7 +56,7 @@
     {
       "label": "Clear Feedback Log",
       "type": "shell",
-      "command": "python ${workspaceFolder}/clear_feedback.py",
+      "command": "python ${workspaceFolder}/scripts/clear_feedback.py",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -97,7 +97,7 @@
     {
       "label": "Check Extension Setup",
       "type": "shell",
-      "command": "python ${workspaceFolder}/check_extension.py",
+      "command": "python ${workspaceFolder}/scripts/check_extension.py",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -107,7 +107,7 @@
     {
       "label": "Add Feedback to Composer (Cursor)",
       "type": "shell",
-      "command": "python ${workspaceFolder}/add_feedback_to_composer.py --editor cursor",
+      "command": "python ${workspaceFolder}/scripts/add_feedback_to_composer.py --editor cursor",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -121,7 +121,7 @@
     {
       "label": "Watch and Add Feedback (Cursor)",
       "type": "shell",
-      "command": "python ${workspaceFolder}/watch_and_add_feedback.py --editor cursor",
+      "command": "python ${workspaceFolder}/scripts/watch_and_add_feedback.py --editor cursor",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -132,7 +132,7 @@
     {
       "label": "Add Feedback to Composer (VS Code)",
       "type": "shell",
-      "command": "python ${workspaceFolder}/add_feedback_to_composer.py --editor vscode",
+      "command": "python ${workspaceFolder}/scripts/add_feedback_to_composer.py --editor vscode",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -142,7 +142,7 @@
     {
       "label": "Add Feedback to Composer (System Default)",
       "type": "shell",
-      "command": "python ${workspaceFolder}/add_feedback_to_composer.py --editor system",
+      "command": "python ${workspaceFolder}/scripts/add_feedback_to_composer.py --editor system",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -152,7 +152,7 @@
     {
       "label": "Start MCP Server for Cursor",
       "type": "shell",
-      "command": "npx ff-mcp start --cursor",
+      "command": "python ${workspaceFolder}/mcp/ff-mcp start --cursor",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

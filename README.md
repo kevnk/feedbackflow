@@ -13,6 +13,18 @@ A Chrome extension that allows you to send feedback from your website to your AI
 - `ff` command-line tool for AI assistant integration
 - Model Context Protocol (MCP) integration for direct AI assistant access to feedback
 
+## Project Structure
+
+The project is organized into the following directories:
+
+- `chrome-extension/` - Chrome extension files (manifest, popup, content script, etc.)
+- `native-host/` - Native messaging host for communication between Chrome and the local system
+- `scripts/` - Utility scripts for reading feedback, adding to composer, etc.
+- `mcp/` - Model Context Protocol integration for AI assistants
+- `cli/` - Command-line tools for AI assistant integration
+- `docs/` - Documentation files
+- `sample-website/` - Sample website demonstrating the JavaScript API
+
 ## Installation
 
 ### Quick Setup
@@ -39,7 +51,7 @@ Alternatively, you can use the VS Code/Cursor task "Setup Extension" to run the 
 1. Clone this repository or download it to your local machine
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable "Developer mode" in the top-right corner
-4. Click "Load unpacked" and select the root directory of this project
+4. Click "Load unpacked" and select the `chrome-extension` directory of this project
 5. The Feedback Flow extension should now appear in your extensions list
 
 #### 2. Install the Native Messaging Host
@@ -62,7 +74,7 @@ This will:
 After installing the extension, you need to update the native messaging host with your extension ID:
 
 ```bash
-python update_extension_id.py YOUR_EXTENSION_ID
+python scripts/update_extension_id.py YOUR_EXTENSION_ID
 ```
 
 Replace `YOUR_EXTENSION_ID` with the ID of your extension, which you can find in Chrome's extension management page (chrome://extensions/) after enabling Developer mode.
@@ -75,7 +87,7 @@ If the automatic installation doesn't work:
 
 2. If you need to manually set up the native host:
    - Copy the example manifest file to create `native-host/com.feedbackflow.host.json`
-   - Replace `PLACEHOLDER_PATH` with the absolute path to the `feedbackflow_host.py` script
+   - Replace `PLACEHOLDER_PATH` with the absolute path to the `native-host/feedbackflow_host.py` script
    - After loading the extension, update the allowed origins with your extension ID
 
 3. Copy the manifest file to the appropriate location:
@@ -164,7 +176,7 @@ If you see a "Native messaging error" when sending feedback:
 
 1. Make sure you've updated the extension ID in the native messaging host manifest:
    ```bash
-   python update_extension_id.py YOUR_EXTENSION_ID
+   python scripts/update_extension_id.py YOUR_EXTENSION_ID
    ```
    Replace `YOUR_EXTENSION_ID` with the ID of your extension, which you can find in Chrome's extension management page (chrome://extensions/) after enabling Developer mode.
 

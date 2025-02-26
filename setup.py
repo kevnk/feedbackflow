@@ -26,7 +26,7 @@ def create_icons():
     """Create icon files for the extension."""
     print("Creating extension icons...")
     try:
-        subprocess.check_call([sys.executable, "create_icons.py"])
+        subprocess.check_call([sys.executable, "scripts/create_icons.py"])
     except subprocess.CalledProcessError:
         print("Error: Failed to create icons.")
         sys.exit(1)
@@ -50,14 +50,14 @@ def setup_mcp():
     if choice == 'y' or choice == 'yes':
         print("\nSetting up MCP server...")
         try:
-            subprocess.check_call([sys.executable, "install_mcp.py"])
+            subprocess.check_call([sys.executable, "mcp/install_mcp.py"])
             print("✅ MCP server setup complete.")
         except subprocess.CalledProcessError:
             print("❌ Error setting up MCP server.")
-            print("You can run the setup manually later with: python install_mcp.py")
+            print("You can run the setup manually later with: python mcp/install_mcp.py")
     else:
         print("\nSkipping MCP server setup.")
-        print("You can set it up later by running: python install_mcp.py")
+        print("You can set it up later by running: python mcp/install_mcp.py")
 
 def make_ff_executable():
     """Make the ff command executable and offer to install it globally."""
@@ -68,7 +68,7 @@ def make_ff_executable():
     
     # Make the ff script executable on Unix-like systems
     if platform.system() != "Windows":
-        ff_path = os.path.join(current_dir, "ff")
+        ff_path = os.path.join(current_dir, "cli/ff")
         try:
             os.chmod(ff_path, 0o755)  # rwxr-xr-x
             print(f"✅ Made {ff_path} executable")
@@ -109,23 +109,23 @@ def make_ff_executable():
             except (OSError, subprocess.CalledProcessError) as e:
                 print(f"❌ Error creating symlink: {e}")
                 print("\nAlternatively, you can add this directory to your PATH:")
-                print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.bashrc')
-                print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.zshrc  # if using zsh')
+                print(f'  echo \'export PATH="$PATH:{current_dir}/cli"\' >> ~/.bashrc')
+                print(f'  echo \'export PATH="$PATH:{current_dir}/cli"\' >> ~/.zshrc  # if using zsh')
     else:
         # Print usage instructions
         print("\nYou can use the 'ff' command to add FeedbackFlow AI assistant integration to any project:")
-        print(f"  {current_dir}/ff ./your-project-directory")
+        print(f"  {current_dir}/cli/ff ./your-project-directory")
         print("\nFor easier access later, you can add this directory to your PATH or create a symlink:")
         
         if platform.system() == "Windows":
             print("\nOn Windows:")
-            print(f'  setx PATH "%PATH%;{current_dir}"')
+            print(f'  setx PATH "%PATH%;{current_dir}/cli"')
         else:
             print("\nOn macOS/Linux:")
-            print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.bashrc')
-            print(f'  echo \'export PATH="$PATH:{current_dir}"\' >> ~/.zshrc  # if using zsh')
+            print(f'  echo \'export PATH="$PATH:{current_dir}/cli"\' >> ~/.bashrc')
+            print(f'  echo \'export PATH="$PATH:{current_dir}/cli"\' >> ~/.zshrc  # if using zsh')
             print("  Or create a symlink:")
-            print(f"  sudo ln -s {current_dir}/ff /usr/local/bin/ff")
+            print(f"  sudo ln -s {current_dir}/cli/ff /usr/local/bin/ff")
 
 def setup_extension():
     """Set up the Chrome extension."""
@@ -133,7 +133,7 @@ def setup_extension():
     print("\nTo load the extension in Chrome:")
     print("1. Open Chrome and navigate to chrome://extensions/")
     print("2. Enable 'Developer mode' in the top-right corner")
-    print("3. Click 'Load unpacked' and select this directory")
+    print("3. Click 'Load unpacked' and select the 'chrome-extension' directory")
     print("4. The Feedback Flow extension should now appear in your extensions list")
 
 def main():
@@ -163,7 +163,7 @@ def main():
     
     print("\nSetup complete! You can now use the Feedback Flow extension.")
     print("\nTo add FeedbackFlow AI assistant integration to a project, use the 'ff' command:")
-    print("  ./ff ./your-project-directory")
+    print("  ./cli/ff ./your-project-directory")
     print("\nIf you set up the MCP server, AI assistants can now access and interact with your feedback log.")
 
 if __name__ == "__main__":

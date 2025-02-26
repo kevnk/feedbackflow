@@ -8,6 +8,7 @@ from pathlib import Path
 
 # Get the absolute path of the current directory
 current_dir = os.path.abspath(os.path.dirname(__file__))
+project_root = os.path.abspath(os.path.join(current_dir, '..'))
 
 # Get the path to the host manifest example
 example_manifest_path = os.path.join(current_dir, 'com.feedbackflow.host.json.example')

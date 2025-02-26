@@ -8,7 +8,7 @@
     "vscode": "^1.51.0"
   },
   "bin": {
-    "feedbackflow": "./feedbackflow-cli.js"
+    "feedbackflow": "./cli/feedbackflow-cli.js"
   },
   "categories": [
     "Other"
@@ -36,11 +36,11 @@
     ]
   },
   "scripts": {
-    "add-to-composer": "python add_feedback_to_composer.py",
-    "start-mcp": "python mcp_server.py",
-    "start-mcp-cursor": "npx ff-mcp start --cursor",
-    "setup-cursor-mcp": "python ff-mcp cursor",
-    "install-mcp": "python install_mcp.py",
-    "install-global": "node install_global.js"
+    "add-to-composer": "python scripts/add_feedback_to_composer.py",
+    "start-mcp": "python mcp/mcp_server.py",
+    "start-mcp-cursor": "python mcp/ff-mcp start --cursor",
+    "setup-cursor-mcp": "python mcp/ff-mcp cursor",
+    "install-mcp": "python mcp/install_mcp.py",
+    "install-global": "node cli/install_global.js"
   }
 } 

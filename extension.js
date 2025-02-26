@@ -16,7 +16,7 @@ function activate(context) {
             return;
         }
 
-        const scriptPath = path.join(workspaceFolders[0].uri.fsPath, 'add_feedback_to_composer.py');
+        const scriptPath = path.join(workspaceFolders[0].uri.fsPath, 'scripts/add_feedback_to_composer.py');
         
         // Run the Python script
         exec(`python "${scriptPath}"`, (error, stdout, stderr) => {
@@ -43,7 +43,7 @@ function activate(context) {
             return;
         }
 
-        const ffMcpPath = path.join(workspaceFolders[0].uri.fsPath, 'ff-mcp');
+        const ffMcpPath = path.join(workspaceFolders[0].uri.fsPath, 'mcp/ff-mcp');
         
         // Ask user for transport type
         vscode.window.showQuickPick(['SSE (default)', 'stdio'], {
@@ -72,7 +72,7 @@ function activate(context) {
             return;
         }
 
-        const ffMcpPath = path.join(workspaceFolders[0].uri.fsPath, 'ff-mcp');
+        const ffMcpPath = path.join(workspaceFolders[0].uri.fsPath, 'mcp/ff-mcp');
         
         // Run the stop command
         const terminal = vscode.window.createTerminal('FeedbackFlow MCP');
@@ -92,7 +92,7 @@ function activate(context) {
             return;
         }
 
-        const ffMcpPath = path.join(workspaceFolders[0].uri.fsPath, 'ff-mcp');
+        const ffMcpPath = path.join(workspaceFolders[0].uri.fsPath, 'mcp/ff-mcp');
         
         // Run the cursor setup command
         const terminal = vscode.window.createTerminal('FeedbackFlow MCP');
