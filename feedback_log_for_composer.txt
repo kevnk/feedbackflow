@@ -1,9 +1,0 @@
-Sample feedback entry 1
-Sample feedback entry 2
-
--------------------------------
-Timestamp: 2025-02-26T15:38:09.151Z
-URL: chrome://extensions/
-Title: Extensions
-Feedback: hi mam
--------------------------------
