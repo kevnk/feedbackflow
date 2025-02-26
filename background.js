@@ -2,6 +2,9 @@
 // We'll use a hidden folder in the user's home directory
 const LOG_FILE_PATH = '.feedbackloop/feedback.log';
 
+// Store the verbose mode state
+let verboseMode = false;
+
 // Listen for messages from popup or content scripts
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.action === 'saveFeedback') {
@@ -24,7 +27,7 @@ Feedback: ${message.feedback}
       feedbackLog += feedbackEntry;
       
       chrome.storage.local.set({ feedbackLog: feedbackLog }, function() {
-        console.log('Feedback saved to local storage');
+        if (verboseMode) console.log('Feedback saved to local storage');
         
         // Also try to send to a native host if available
         try {
@@ -37,10 +40,10 @@ Feedback: ${message.feedback}
             },
             function(response) {
               if (response && response.success) {
-                console.log('Feedback saved to log file');
+                if (verboseMode) console.log('Feedback saved to log file');
                 sendResponse({ success: true });
               } else {
-                console.warn('Failed to save to log file, but saved to local storage');
+                if (verboseMode) console.warn('Failed to save to log file, but saved to local storage');
                 sendResponse({ 
                   success: true, 
                   warning: 'Saved to extension storage only. Native messaging not available.'
@@ -64,7 +67,7 @@ Feedback: ${message.feedback}
   else if (message.action === 'clearFeedback') {
     // Clear the feedback in local storage
     chrome.storage.local.set({ feedbackLog: '' }, function() {
-      console.log('Feedback cleared from local storage');
+      if (verboseMode) console.log('Feedback cleared from local storage');
       
       // Also try to send to a native host if available
       try {
@@ -76,10 +79,10 @@ Feedback: ${message.feedback}
           },
           function(response) {
             if (response && response.success) {
-              console.log('Feedback log file cleared');
+              if (verboseMode) console.log('Feedback log file cleared');
               sendResponse({ success: true });
             } else {
-              console.warn('Failed to clear log file, but cleared local storage');
+              if (verboseMode) console.warn('Failed to clear log file, but cleared local storage');
               sendResponse({ 
                 success: true, 
                 warning: 'Cleared extension storage only. Native messaging not available.'
@@ -98,5 +101,43 @@ Feedback: ${message.feedback}
     
     // Return true to indicate we will send a response asynchronously
     return true;
+  }
+  else if (message.action === 'toggleVerbose') {
+    // Toggle verbose mode
+    verboseMode = message.value !== undefined ? message.value : !verboseMode;
+    
+    // Store the setting
+    chrome.storage.local.set({ verboseMode: verboseMode }, function() {
+      if (verboseMode) {
+        console.log('Verbose mode enabled');
+      } else {
+        console.log('Verbose mode disabled');
+      }
+    });
+    
+    // Broadcast to all tabs
+    chrome.tabs.query({}, function(tabs) {
+      for (let tab of tabs) {
+        try {
+          chrome.tabs.sendMessage(tab.id, {
+            action: 'setVerbose',
+            value: verboseMode
+          });
+        } catch (error) {
+          // Ignore errors for tabs that don't have our content script
+        }
+      }
+    });
+    
+    sendResponse({ success: true, verbose: verboseMode });
+    return true;
+  }
+});
+
+// Initialize verbose mode from storage
+chrome.storage.local.get(['verboseMode'], function(result) {
+  verboseMode = result.verboseMode || false;
+  if (verboseMode) {
+    console.log('Verbose mode initialized to: ' + verboseMode);
   }
 }); 

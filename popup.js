@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const sendButton = document.getElementById('send-feedback');
   const clearButton = document.getElementById('clear-feedback');
   const statusDiv = document.getElementById('status');
+  const verboseToggle = document.getElementById('verbose-mode');
 
   // Detect OS and update button text with appropriate key symbols
   function updateButtonText() {
@@ -20,6 +21,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Update button text on load
   updateButtonText();
+
+  // Initialize verbose mode toggle from storage
+  chrome.storage.local.get(['verboseMode'], function(result) {
+    verboseToggle.checked = result.verboseMode || false;
+  });
+
+  // Handle verbose mode toggle
+  verboseToggle.addEventListener('change', function() {
+    const isVerbose = verboseToggle.checked;
+    
+    // Send message to background script to toggle verbose mode
+    chrome.runtime.sendMessage({ 
+      action: 'toggleVerbose', 
+      value: isVerbose 
+    }, function(response) {
+      if (response && response.success) {
+        statusDiv.textContent = isVerbose ? 'Verbose mode enabled' : 'Verbose mode disabled';
+        statusDiv.className = 'status success';
+        
+        // Clear status after 2 seconds
+        setTimeout(function() {
+          statusDiv.textContent = '';
+          statusDiv.className = 'status';
+        }, 2000);
+      }
+    });
+  });
 
   // Get the current tab information
   async function getCurrentTab() {
