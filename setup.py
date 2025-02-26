@@ -41,6 +41,24 @@ def install_native_host():
         print("You may need to run the native host installation manually.")
         print("Run: python native-host/install_host.py")
 
+def setup_mcp():
+    """Set up the Model Context Protocol server."""
+    print("\nWould you like to set up the Model Context Protocol (MCP) server? (y/n)")
+    print("This allows AI assistants to access and interact with your feedback log.")
+    choice = input().strip().lower()
+    
+    if choice == 'y' or choice == 'yes':
+        print("\nSetting up MCP server...")
+        try:
+            subprocess.check_call([sys.executable, "install_mcp.py"])
+            print("✅ MCP server setup complete.")
+        except subprocess.CalledProcessError:
+            print("❌ Error setting up MCP server.")
+            print("You can run the setup manually later with: python install_mcp.py")
+    else:
+        print("\nSkipping MCP server setup.")
+        print("You can set it up later by running: python install_mcp.py")
+
 def make_ff_executable():
     """Make the ff command executable and offer to install it globally."""
     print("\nMaking the 'ff' command executable...")
@@ -134,6 +152,9 @@ def main():
     # Install native host
     install_native_host()
     
+    # Set up MCP server
+    setup_mcp()
+    
     # Make ff executable
     make_ff_executable()
     
@@ -143,6 +164,7 @@ def main():
     print("\nSetup complete! You can now use the Feedback Flow extension.")
     print("\nTo add FeedbackFlow AI assistant integration to a project, use the 'ff' command:")
     print("  ./ff ./your-project-directory")
+    print("\nIf you set up the MCP server, AI assistants can now access and interact with your feedback log.")
 
 if __name__ == "__main__":
     main() 

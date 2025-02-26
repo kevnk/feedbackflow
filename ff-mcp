@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import argparse
+import subprocess
+import platform
+from pathlib import Path
+
+def get_script_dir():
+    """Get the directory where this script is located."""
+    return os.path.dirname(os.path.abspath(__file__))
+
+def start_server():
+    """Start the MCP server."""
+    script_dir = get_script_dir()
+    run_script = os.path.join(script_dir, "run_mcp_server.py")
+    
+    print("Starting FeedbackFlow MCP server...")
+    try:
+        # Use subprocess.run to start the server in the foreground
+        subprocess.run([sys.executable, run_script], check=True)
+    except KeyboardInterrupt:
+        print("\nMCP server stopped.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error starting MCP server: {e}")
+        sys.exit(1)
+
+def stop_server():
+    """Stop the MCP server if running as a service."""
+    system = platform.system()
+    if system == "Linux" or system == "Darwin":  # Linux or macOS
+        print("Stopping FeedbackFlow MCP service...")
+        try:
+            subprocess.run(["systemctl", "--user", "stop", "feedbackflow-mcp.service"], check=True)
+            print("MCP service stopped.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error stopping MCP service: {e}")
+            sys.exit(1)
+    else:
+        print("Stopping the MCP service is only supported on Linux and macOS with systemd.")
+        print("If running the server directly, use Ctrl+C to stop it.")
+
+def status_server():
+    """Check the status of the MCP server."""
+    system = platform.system()
+    if system == "Linux" or system == "Darwin":  # Linux or macOS
+        print("Checking FeedbackFlow MCP service status...")
+        try:
+            subprocess.run(["systemctl", "--user", "status", "feedbackflow-mcp.service"], check=True)
+        except subprocess.CalledProcessError:
+            # Status command might return non-zero if service is not running
+            pass
+    else:
+        print("Checking service status is only supported on Linux and macOS with systemd.")
+        print("If you're running the server directly, check your terminal for the running process.")
+
+def install_server():
+    """Install the MCP server."""
+    script_dir = get_script_dir()
+    install_script = os.path.join(script_dir, "install_mcp.py")
+    
+    print("Installing FeedbackFlow MCP server...")
+    try:
+        subprocess.run([sys.executable, install_script], check=True)
+        print("MCP server installation completed.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing MCP server: {e}")
+        sys.exit(1)
+
+def main():
+    parser = argparse.ArgumentParser(description="FeedbackFlow MCP Server Management Tool")
+    subparsers = parser.add_subparsers(dest="command", help="Command to execute")
+    
+    # Start command
+    start_parser = subparsers.add_parser("start", help="Start the MCP server")
+    
+    # Stop command
+    stop_parser = subparsers.add_parser("stop", help="Stop the MCP server service")
+    
+    # Status command
+    status_parser = subparsers.add_parser("status", help="Check the status of the MCP server")
+    
+    # Install command
+    install_parser = subparsers.add_parser("install", help="Install the MCP server")
+    
+    args = parser.parse_args()
+    
+    if args.command == "start":
+        start_server()
+    elif args.command == "stop":
+        stop_server()
+    elif args.command == "status":
+        status_server()
+    elif args.command == "install":
+        install_server()
+    else:
+        parser.print_help()
+
+if __name__ == "__main__":
+    main() 

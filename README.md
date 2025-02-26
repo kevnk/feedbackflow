@@ -11,6 +11,7 @@ A Chrome extension that allows you to send feedback from your website to your AI
 - VS Code/Cursor integration via tasks
 - Easy addition of feedback log to Cursor composer context
 - `ff` command-line tool for AI assistant integration
+- Model Context Protocol (MCP) integration for direct AI assistant access to feedback
 
 ## Installation
 
@@ -302,4 +303,41 @@ The `ff` command creates a `.github/copilot-instructions.md` file in your projec
 If you already have a `.github/copilot-instructions.md` file, the `ff` command will intelligently merge the FeedbackFlow information with your existing instructions instead of overwriting them.
 
 These files make it easier for AI assistants to help you integrate FeedbackFlow into your websites.
+
+## Model Context Protocol (MCP) Integration
+
+FeedbackFlow now supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), which allows AI assistants to directly access and interact with your feedback log.
+
+### Setup
+
+The MCP server can be set up during the FeedbackFlow installation process or separately:
+
+1. **During Installation**:
+   - When running `setup.py`, you'll be asked if you want to set up the MCP server
+   - If you choose yes, the script will install the necessary dependencies and set up the server
+
+2. **Separate Setup**:
+   - Run `python install_mcp.py` to install the MCP dependencies and set up the server
+   - Or use the command-line tool: `./ff-mcp install`
+
+### Running the MCP Server
+
+There are several ways to run the MCP server:
+
+1. **Using the Command-Line Tool**:
+   - Start the server: `./ff-mcp start`
+   - Stop the service: `./ff-mcp stop`
+   - Check status: `./ff-mcp status`
+
+2. **Direct Execution**:
+   - Run `python mcp_server.py` to start the server directly
+   - Press Ctrl+C to stop the server
+
+3. **Helper Script**:
+   - Run `python run_mcp_server.py` which handles dependency checking and graceful shutdown
+
+4. **As a Service** (Linux/macOS with systemd):
+   - After setup, the server can run as a systemd service
+
+For more detailed information about the MCP integration, see [MCP_README.md](MCP_README.md).
 
