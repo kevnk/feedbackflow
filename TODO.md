@@ -22,4 +22,9 @@
   - Enhanced the `ff` command to intelligently merge with existing files:
     1. Merges with existing .cursorrules in both home directory and project directory
     2. Merges with existing .github/copilot-instructions.md in the project directory
-- [ ] Add MCP functionality to this project where it makes sense — reference https://github.com/modelcontextprotocol/python-sdk
+- [x] Add MCP functionality to this project where it makes sense — reference https://github.com/modelcontextprotocol/python-sdk
+- [ ] Refactor this project to make it easier to understand and maintain — add comments, improve variable names, etc.
+	- NOTE: Use whatever is best practice for this kind of project
+  - [ ] Move chrome extension files to a separate chrome-extension directory?
+	- [ ] Move MCP files to a separate mcp directory?
+	- [ ] Move scripts to a separate scripts directory maybe?

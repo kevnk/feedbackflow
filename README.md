@@ -306,7 +306,7 @@ These files make it easier for AI assistants to help you integrate FeedbackFlow 
 
 ## Model Context Protocol (MCP) Integration
 
-FeedbackFlow now supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), which allows AI assistants to directly access and interact with your feedback log.
+FeedbackFlow now supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), which allows AI assistants to directly access and interact with your feedback log, creating a seamless AI-driven development cycle.
 
 ### Setup
 
@@ -326,6 +326,7 @@ There are several ways to run the MCP server:
 
 1. **Using the Command-Line Tool**:
    - Start the server: `./ff-mcp start`
+   - Start with specific options: `./ff-mcp start --transport sse --port 8080`
    - Stop the service: `./ff-mcp stop`
    - Check status: `./ff-mcp status`
 
@@ -339,5 +340,50 @@ There are several ways to run the MCP server:
 4. **As a Service** (Linux/macOS with systemd):
    - After setup, the server can run as a systemd service
 
-For more detailed information about the MCP integration, see [MCP_README.md](MCP_README.md).
+### Cursor IDE Integration
+
+FeedbackFlow MCP integrates seamlessly with [Cursor IDE](https://cursor.sh/), enabling an AI-driven development cycle:
+
+1. **Quick Setup**:
+   ```bash
+   ./ff-mcp cursor
+   ```
+   This command guides you through the setup process and provides instructions for adding FeedbackFlow to Cursor.
+
+2. **AI-Driven Development Cycle**:
+   - **Code Generation**: AI in Cursor writes website code with embedded feedback collection using `window.FeedbackFlow.sendFeedback()`
+   - **Feedback Collection**: During testing, the website automatically sends feedback about user interactions and errors
+   - **Feedback Analysis**: AI accesses and analyzes this feedback through MCP resources
+   - **Code Improvement**: AI makes code adjustments based on the feedback
+   - **Feedback Resolution**: AI marks feedback as addressed, completing the loop
+
+3. **Example Workflow**:
+   ```javascript
+   // AI-generated code for error tracking
+   try {
+     // Complex operation
+   } catch (error) {
+     window.FeedbackFlow.sendFeedback(
+       `Error occurred: ${error.message}`,
+       'payment-form.js',
+       {severity: 'high', component: 'PaymentProcessor'}
+     );
+   }
+   ```
+
+   Later, in Cursor:
+   ```
+   // AI accesses feedback
+   feedback_data = await read_resource("feedback://log")
+   
+   // AI marks issue as resolved after fixing
+   await invoke_tool("mark_feedback_addressed", {
+     "timestamp": "2023-01-01 12:34:56",
+     "resolution": "Improved error handling in payment form"
+   })
+   ```
+
+This creates a powerful self-improving system where the AI can continuously refine both the application code and the feedback collection mechanisms.
+
+For more detailed information about the MCP integration and Cursor setup, see [MCP_README.md](MCP_README.md).
 

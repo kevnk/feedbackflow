@@ -11,15 +11,24 @@ def get_script_dir():
     """Get the directory where this script is located."""
     return os.path.dirname(os.path.abspath(__file__))
 
-def start_server():
+def start_server(cursor_mode=False, transport="sse", port=8080):
     """Start the MCP server."""
     script_dir = get_script_dir()
-    run_script = os.path.join(script_dir, "run_mcp_server.py")
+    mcp_script = os.path.join(script_dir, "mcp_server.py")
     
     print("Starting FeedbackFlow MCP server...")
     try:
+        # Build command with appropriate arguments
+        cmd = [sys.executable, mcp_script]
+        if cursor_mode:
+            cmd.append("--cursor")
+        if transport:
+            cmd.extend(["--transport", transport])
+        if port:
+            cmd.extend(["--port", str(port)])
+            
         # Use subprocess.run to start the server in the foreground
-        subprocess.run([sys.executable, run_script], check=True)
+        subprocess.run(cmd, check=True)
     except KeyboardInterrupt:
         print("\nMCP server stopped.")
     except subprocess.CalledProcessError as e:
@@ -68,12 +77,43 @@ def install_server():
         print(f"Error installing MCP server: {e}")
         sys.exit(1)
 
+def setup_cursor():
+    """Set up the MCP server for Cursor integration."""
+    script_dir = get_script_dir()
+    mcp_script = os.path.join(script_dir, "mcp_server.py")
+    
+    print("Setting up FeedbackFlow MCP for Cursor integration...")
+    
+    # Print instructions for adding to Cursor
+    print("\n=== Cursor Integration Instructions ===")
+    print("\nTo add FeedbackFlow MCP to Cursor:")
+    print("1. Open Cursor IDE")
+    print("2. Go to Settings > Features > MCP Servers")
+    print("3. Click 'Add New MCP Server'")
+    print("4. Use the following settings:")
+    print("   - Name: FeedbackFlow")
+    print(f"   - Command: {sys.executable} {os.path.abspath(mcp_script)} --cursor")
+    print("\nAlternatively, you can use the SSE transport with:")
+    print("   - Name: FeedbackFlow")
+    print("   - URL: http://localhost:8080")
+    
+    # Ask if user wants to start the server now
+    print("\nWould you like to start the MCP server now? (y/n)")
+    choice = input().strip().lower()
+    if choice == 'y' or choice == 'yes':
+        start_server(cursor_mode=True, transport="stdio")
+
 def main():
     parser = argparse.ArgumentParser(description="FeedbackFlow MCP Server Management Tool")
     subparsers = parser.add_subparsers(dest="command", help="Command to execute")
     
     # Start command
     start_parser = subparsers.add_parser("start", help="Start the MCP server")
+    start_parser.add_argument("--cursor", action="store_true", help="Start in Cursor integration mode")
+    start_parser.add_argument("--transport", choices=["sse", "stdio"], default="sse", 
+                             help="Transport protocol to use (default: sse)")
+    start_parser.add_argument("--port", type=int, default=8080, 
+                             help="Port to run the server on (default: 8080)")
     
     # Stop command
     stop_parser = subparsers.add_parser("stop", help="Stop the MCP server service")
@@ -84,16 +124,25 @@ def main():
     # Install command
     install_parser = subparsers.add_parser("install", help="Install the MCP server")
     
+    # Cursor setup command
+    cursor_parser = subparsers.add_parser("cursor", help="Set up for Cursor integration")
+    
     args = parser.parse_args()
     
     if args.command == "start":
-        start_server()
+        start_server(
+            cursor_mode=args.cursor,
+            transport=args.transport,
+            port=args.port
+        )
     elif args.command == "stop":
         stop_server()
     elif args.command == "status":
         status_server()
     elif args.command == "install":
         install_server()
+    elif args.command == "cursor":
+        setup_cursor()
     else:
         parser.print_help()
 

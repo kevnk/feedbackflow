@@ -1,7 +1,7 @@
 {
   "name": "feedbackflow",
   "displayName": "Feedback Flow",
-  "description": "A Chrome extension that allows you to send feedback from your website to your AI assistant",
+  "description": "A Chrome extension that enables AI-driven development through feedback collection and MCP integration with Cursor IDE",
   "version": "1.0.0",
   "publisher": "feedbackflow",
   "engines": {
@@ -17,10 +17,26 @@
       {
         "command": "feedbackflow.addToComposer",
         "title": "Feedback Flow: Add Feedback Log to Composer"
+      },
+      {
+        "command": "feedbackflow.startMcpServer",
+        "title": "Feedback Flow: Start MCP Server"
+      },
+      {
+        "command": "feedbackflow.stopMcpServer",
+        "title": "Feedback Flow: Stop MCP Server"
+      },
+      {
+        "command": "feedbackflow.setupCursorMcp",
+        "title": "Feedback Flow: Setup Cursor MCP Integration"
       }
     ]
   },
   "scripts": {
-    "add-to-composer": "python add_feedback_to_composer.py"
+    "add-to-composer": "python add_feedback_to_composer.py",
+    "start-mcp": "python mcp_server.py",
+    "start-mcp-cursor": "python mcp_server.py --cursor",
+    "setup-cursor-mcp": "python ff-mcp cursor",
+    "install-mcp": "python install_mcp.py"
   }
 } 
