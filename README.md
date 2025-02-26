@@ -9,6 +9,7 @@ A Chrome extension that allows you to send feedback from your website to your AI
 - Native messaging host to write feedback to a local log file
 - Python script to read and watch the feedback log
 - VS Code/Cursor integration via tasks
+- Easy addition of feedback log to Cursor composer context
 
 ## Installation
 
@@ -164,4 +165,30 @@ If you see a "Native messaging error" when sending feedback:
    ```bash
    chmod +x native-host/feedbackloop_host.py
    ```
+
+## Using Feedback with Cursor Composer
+
+To easily add the feedback log to the Cursor composer context, you can use one of the following methods:
+
+### Method 1: Use the VS Code Task
+
+1. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) to open the Command Palette
+2. Type "Tasks: Run Task" and select it
+3. Select "Add Feedback Log to Composer"
+4. The feedback log will be copied to your workspace and opened in the editor
+5. Drag and drop the opened file from the Explorer into the Composer
+
+### Method 2: Use the Keyboard Shortcut
+
+1. Press `Ctrl+Alt+F` to run the "Add Feedback Log to Composer" task
+2. The feedback log will be copied to your workspace and opened in the editor
+3. Drag and drop the opened file from the Explorer into the Composer
+
+### Method 3: Run the Script Directly
+
+```bash
+python add_feedback_to_composer.py
+```
+
+This will copy the feedback log to your workspace and open it in the editor, allowing you to easily add it to the Composer context.
 

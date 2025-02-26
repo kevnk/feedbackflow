@@ -1,0 +1,2 @@
+- [x] Is there a way to add the feedback.log to the context of composer easily in cursor/vscode?
+- [ ] For sending feedback (in the popup and sample website), send feedback with command/crtl + enter; add the shortcut indication on the button 
