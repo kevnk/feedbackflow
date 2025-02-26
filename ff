@@ -1,7 +1,19 @@
 #!/bin/bash
 
-# Get the directory where this script is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# Get the real path of this script (works on macOS and Linux)
+if [[ -L "$0" ]]; then
+  # If this is a symlink, get the target
+  SCRIPT_PATH=$(readlink "$0")
+  # If the path is relative, make it absolute
+  if [[ ! "$SCRIPT_PATH" = /* ]]; then
+    SCRIPT_PATH="$(dirname "$0")/$SCRIPT_PATH"
+  fi
+else
+  SCRIPT_PATH="$0"
+fi
+
+# Get the directory containing the script
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 
 # Run the Python script with all arguments passed to this script
-python3 "$SCRIPT_DIR/ff.py" "$@" 
+python3 "${SCRIPT_DIR}/ff.py" "$@" 
