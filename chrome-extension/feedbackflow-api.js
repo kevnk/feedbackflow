@@ -31,41 +31,44 @@ window.FeedbackFlow = {
   },
   
   sendFeedback: function(feedback) {
-    try {
-      // Use a custom event to communicate with the content script
-      const customEvent = new CustomEvent('feedbackflow-send', { 
-        detail: { feedback: feedback } 
-      });
-      window.dispatchEvent(customEvent);
-      
-      // Set up a listener for the response
-      const responseHandler = function(event) {
-        if (event.data && event.data.type === 'FEEDBACK_FLOW_RESPONSE') {
-          if (event.data.success) {
-            window.FeedbackFlow.log('Feedback sent successfully');
-            if (event.data.warning) {
-              window.FeedbackFlow.log('Warning: ' + event.data.warning, 'warn');
+    return new Promise((resolve, reject) => {
+      try {
+        // Use a custom event to communicate with the content script
+        const customEvent = new CustomEvent('feedbackflow-send', { 
+          detail: { feedback: feedback } 
+        });
+        window.dispatchEvent(customEvent);
+        
+        // Set up a listener for the response
+        const responseHandler = function(event) {
+          if (event.data && event.data.type === 'FEEDBACK_FLOW_RESPONSE') {
+            if (event.data.success) {
+              window.FeedbackFlow.log('Feedback sent successfully');
+              if (event.data.warning) {
+                window.FeedbackFlow.log('Warning: ' + event.data.warning, 'warn');
+              }
+              resolve(true);
+            } else if (event.data.error) {
+              // Always show errors, even in non-verbose mode
+              console.error('Error sending feedback:', event.data.error);
+              reject(new Error(event.data.error));
             }
-          } else if (event.data.error) {
-            // Always show errors, even in non-verbose mode
-            console.error('Error sending feedback:', event.data.error);
+            // Remove the listener after receiving a response
+            window.removeEventListener('message', responseHandler);
           }
-          // Remove the listener after receiving a response
-          window.removeEventListener('message', responseHandler);
-        }
-      };
-      
-      // Add the response listener
-      window.addEventListener('message', responseHandler);
-      
-      this.log('Feedback submitted. Waiting for confirmation...');
-      return true;
-    } catch (error) {
-      // Always show errors, even in non-verbose mode
-      console.error('Failed to send feedback:', error.message);
-      console.log('If you\'re seeing "Extension context invalidated", try refreshing the page and try again.');
-      return false;
-    }
+        };
+        
+        // Add the response listener
+        window.addEventListener('message', responseHandler);
+        
+        this.log('Feedback submitted. Waiting for confirmation...');
+      } catch (error) {
+        // Always show errors, even in non-verbose mode
+        console.error('Failed to send feedback:', error.message);
+        console.log('If you\'re seeing "Extension context invalidated", try refreshing the page and try again.');
+        reject(error);
+      }
+    });
   }
 };
 

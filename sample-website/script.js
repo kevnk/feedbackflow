@@ -63,9 +63,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.FeedbackFlow) {
       try {
         // Send feedback using the API
-        window.FeedbackFlow.sendFeedback(feedback);
-        statusDiv.textContent = 'Sending feedback...';
-        statusDiv.className = 'status';
+        window.FeedbackFlow.sendFeedback(feedback)
+          .then(() => {
+            // Success will be handled by the message event listener
+            statusDiv.textContent = 'Sending feedback...';
+            statusDiv.className = 'status';
+          })
+          .catch(error => {
+            console.error('Error sending feedback:', error);
+            statusDiv.textContent = 'Error sending feedback: ' + error.message;
+            statusDiv.className = 'status error';
+          });
       } catch (error) {
         console.error('Error sending feedback:', error);
         statusDiv.textContent = 'Error sending feedback: ' + error.message;
