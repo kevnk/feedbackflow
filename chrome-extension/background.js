@@ -1,6 +1,4 @@
-// Define the path for the log file
-// We'll use a hidden folder in the user's home directory
-const LOG_FILE_PATH = '.feedbackflow/feedback.log';
+// The native host always writes ~/.feedbackflow/feedback.log; it ignores any path.
 
 // Store the verbose mode state
 let verboseMode = false;
@@ -35,7 +33,6 @@ Feedback: ${message.feedback}
             'com.feedbackflow.host',
             {
               action: 'writeFeedback',
-              path: LOG_FILE_PATH,
               content: feedbackEntry
             },
             function(response) {
@@ -74,8 +71,7 @@ Feedback: ${message.feedback}
         chrome.runtime.sendNativeMessage(
           'com.feedbackflow.host',
           {
-            action: 'clearFeedback',
-            path: LOG_FILE_PATH
+            action: 'clearFeedback'
           },
           function(response) {
             if (response && response.success) {
