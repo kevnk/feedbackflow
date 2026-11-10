@@ -51,7 +51,8 @@ window.addEventListener('message', function(event) {
         window.postMessage({
           type: 'FEEDBACK_FLOW_RESPONSE',
           success: response && response.success,
-          warning: response && response.warning
+          warning: response && response.warning,
+          error: response && response.error
         }, '*');
       });
     } catch (error) {
@@ -81,7 +82,8 @@ window.addEventListener('feedbackflow-send', function(event) {
         window.postMessage({
           type: 'FEEDBACK_FLOW_RESPONSE',
           success: response && response.success,
-          warning: response && response.warning
+          warning: response && response.warning,
+          error: response && response.error
         }, '*');
       });
     } catch (error) {

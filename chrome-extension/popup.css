@@ -158,4 +158,18 @@ button:active {
 .toggle-label input {
   margin-right: 5px;
   accent-color: #ff9966;
-} 
+}
+
+.site-access {
+  margin-top: 12px;
+  justify-content: center;
+}
+
+/* .toggle-label sets display: flex, which would override the hidden attribute. */
+.site-access[hidden] {
+  display: none;
+}
+
+.site-access input:disabled + span {
+  cursor: default;
+}
