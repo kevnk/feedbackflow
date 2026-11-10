@@ -40,6 +40,10 @@ def main():
     # Create the .feedbackflow directory if it doesn't exist
     feedback_dir = os.path.join(home_dir, '.feedbackflow')
     os.makedirs(feedback_dir, exist_ok=True)
+
+    # The only file this host ever writes. A 'path' in the message is ignored,
+    # so no caller can point a write or a truncate at another file.
+    log_path = os.path.join(feedback_dir, 'feedback.log')
     
     # Process messages from Chrome
     while True:
@@ -47,12 +51,6 @@ def main():
             message = get_message()
             
             if message.get('action') == 'writeFeedback':
-                # Get the log file path
-                log_path = os.path.join(home_dir, message.get('path', '.feedbackflow/feedback.log'))
-                
-                # Ensure the directory exists
-                os.makedirs(os.path.dirname(log_path), exist_ok=True)
-                
                 # Write to the log file
                 with open(log_path, 'a', encoding='utf-8') as f:
                     f.write(message.get('content', ''))
@@ -60,9 +58,6 @@ def main():
                 # Send success response
                 send_message({'success': True})
             elif message.get('action') == 'clearFeedback':
-                # Get the log file path
-                log_path = os.path.join(home_dir, message.get('path', '.feedbackflow/feedback.log'))
-                
                 # Clear the log file by opening it in write mode
                 with open(log_path, 'w', encoding='utf-8') as f:
                     f.write("# Feedback Flow Log File - Cleared on " + time.strftime('%Y-%m-%d %H:%M:%S') + "\n")
