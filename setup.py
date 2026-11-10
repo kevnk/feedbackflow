@@ -104,7 +104,7 @@ def make_ff_executable():
                 else:
                     # Try with sudo
                     print("Creating symlink requires administrator privileges...")
-                    subprocess.run(f"sudo ln -sf {ff_path} /usr/local/bin/ff", shell=True, check=True)
+                    subprocess.run(['sudo', 'ln', '-sf', ff_path, '/usr/local/bin/ff'], check=True)
                     print("✅ Created symlink at /usr/local/bin/ff")
             except (OSError, subprocess.CalledProcessError) as e:
                 print(f"❌ Error creating symlink: {e}")

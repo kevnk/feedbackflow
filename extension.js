@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 const path = require('path');
 
 /**
@@ -19,7 +19,7 @@ function activate(context) {
         const scriptPath = path.join(workspaceFolders[0].uri.fsPath, 'scripts/add_feedback_to_composer.py');
         
         // Run the Python script
-        exec(`python "${scriptPath}"`, (error, stdout, stderr) => {
+        execFile('python', [scriptPath], (error, stdout, stderr) => {
             if (error) {
                 vscode.window.showErrorMessage(`Error running script: ${error.message}`);
                 return;

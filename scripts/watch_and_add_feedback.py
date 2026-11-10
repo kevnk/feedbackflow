@@ -54,28 +54,36 @@ def copy_to_clipboard(text):
         return False
 
 def show_notification(title, message):
-    """Show a notification using platform-specific methods"""
+    """Show a notification using platform-specific methods.
+
+    The title and message reach osascript as arguments and PowerShell as
+    environment variables, never inside a shell string, so quotes in them
+    can't turn into commands.
+    """
     try:
         if platform.system() == 'Darwin':  # macOS
-            os.system(f"""
-                osascript -e 'display notification "{message}" with title "{title}"'
-            """)
+            subprocess.run([
+                'osascript',
+                '-e', 'on run argv',
+                '-e', 'display notification (item 2 of argv) with title (item 1 of argv)',
+                '-e', 'end run',
+                title, message,
+            ])
         elif platform.system() == 'Windows':
             # Using PowerShell for Windows notifications
-            powershell_cmd = f"""
-            powershell -Command "
+            powershell_script = """
             [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
             [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
             $template = [Windows.UI.Notifications.ToastTemplateType]::ToastText02
             $xml = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent($template)
             $text = $xml.GetElementsByTagName('text')
-            $text[0].AppendChild($xml.CreateTextNode('{title}'))
-            $text[1].AppendChild($xml.CreateTextNode('{message}'))
+            $text[0].AppendChild($xml.CreateTextNode($env:FF_TITLE))
+            $text[1].AppendChild($xml.CreateTextNode($env:FF_MESSAGE))
             $toast = [Windows.UI.Notifications.ToastNotification]::new($xml)
             [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Feedback Flow').Show($toast)
-            "
             """
-            subprocess.run(powershell_cmd, shell=True)
+            subprocess.run(['powershell', '-NoProfile', '-Command', powershell_script],
+                           env=dict(os.environ, FF_TITLE=title, FF_MESSAGE=message))
         else:  # Linux
             # Try using notify-send
             try:
