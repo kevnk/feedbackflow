@@ -15,6 +15,10 @@
     <span class="keyboard-shortcut">⌘↵</span>
   </button>
   <div id="status" class="status"></div>
+  <label id="site-access" class="toggle-label site-access" hidden>
+    <input type="checkbox" id="allow-site">
+    <span id="site-access-text"></span>
+  </label>
   <div class="actions">
     <button id="clear-feedback" class="secondary-button">Clear Feedback Log</button>
     <div class="toggle-container">
@@ -24,6 +28,7 @@
       </label>
     </div>
   </div>
+  <script src="origins.js"></script>
   <script src="popup.js"></script>
 </body>
 </html> 

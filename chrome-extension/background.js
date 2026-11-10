@@ -5,6 +5,12 @@ const LOG_FILE_PATH = '.feedbackflow/feedback.log';
 // Store the verbose mode state
 let verboseMode = false;
 
+// feedbackOriginStatus(): which pages may send feedback.
+importScripts('origins.js');
+
+// Longest feedback entry accepted, in characters.
+const MAX_FEEDBACK_CHARS = 20000;
+
 // Listen for messages from popup or content scripts
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.action === 'saveFeedback') {
@@ -22,7 +28,26 @@ Feedback: ${message.feedback}
     // that will write to the log file
     // Note: This requires setting up a native messaging host
     // For now, we'll store in local storage as a fallback
-    chrome.storage.local.get(['feedbackLog'], function(result) {
+    chrome.storage.local.get(['feedbackLog', 'allowedOrigins'], function(result) {
+      // Feedback typed into the popup has no tab. Anything from a content
+      // script came from a web page, so check where (Chrome sets sender.url;
+      // the page can't).
+      if (sender.tab) {
+        const status = feedbackOriginStatus(sender.url, result.allowedOrigins);
+        if (status !== 'local' && status !== 'allowed') {
+          const origin = status === 'unsupported' ? sender.url : new URL(sender.url).origin;
+          sendResponse({
+            success: false,
+            error: `Feedback Flow is off for ${origin}. Turn it on for this site from the extension popup.`
+          });
+          return;
+        }
+      }
+      if (String(message.feedback).length > MAX_FEEDBACK_CHARS) {
+        sendResponse({ success: false, error: `Feedback is too long (over ${MAX_FEEDBACK_CHARS} characters).` });
+        return;
+      }
+
       let feedbackLog = result.feedbackLog || '';
       feedbackLog += feedbackEntry;
       

@@ -121,4 +121,32 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-}); 
+
+  // Whether pages on the current site may send feedback (see origins.js).
+  // Local development hosts always may; any other site must be turned on here.
+  const siteAccess = document.getElementById('site-access');
+  const allowSite = document.getElementById('allow-site');
+  const siteAccessText = document.getElementById('site-access-text');
+
+  getCurrentTab().then(function(tab) {
+    chrome.storage.local.get(['allowedOrigins'], function(result) {
+      const status = feedbackOriginStatus(tab && tab.url, result.allowedOrigins);
+      if (status === 'unsupported') return;
+
+      const origin = new URL(tab.url).origin;
+      siteAccess.hidden = false;
+      allowSite.checked = status !== 'blocked';
+      allowSite.disabled = status === 'local';
+      siteAccessText.textContent = status === 'local'
+        ? `${origin} can send feedback (local development)`
+        : `Let pages on ${origin} send feedback`;
+
+      allowSite.addEventListener('change', function() {
+        chrome.storage.local.get(['allowedOrigins'], function(latest) {
+          const others = (latest.allowedOrigins || []).filter(o => o !== origin);
+          chrome.storage.local.set({ allowedOrigins: allowSite.checked ? others.concat(origin) : others });
+        });
+      });
+    });
+  });
+});

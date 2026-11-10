@@ -35,7 +35,7 @@ This creates a powerful self-improving system where AI continuously refines both
 
 ## Features
 
-- Chrome extension for capturing feedback from any website
+- Chrome extension for capturing feedback from your local development sites, plus any other site you turn on
 - JavaScript API for programmatic feedback collection
 - Native messaging host to write feedback to a local log file
 - Direct integration with Cursor and VS Code via MCP (Model Context Protocol)
@@ -312,7 +312,15 @@ If the automatic installation doesn't work:
 
 ### Using the JavaScript API in Your Website
 
-The extension injects a JavaScript API into every web page. You can use it like this:
+The extension injects a JavaScript API into every web page, but only some pages may send feedback with it:
+
+- **Local development hosts always may:** `localhost`, `127.0.0.1`, `[::1]`, `*.localhost` and `*.test`, on any port.
+- **Any other site must be turned on first.** Open the extension popup on that site and check "Let pages on … send feedback."
+- **Feedback typed into the popup always goes through,** whatever tab is open.
+
+This matters because your AI assistant reads the feedback log. Without the check, any site you visited could write instructions into it. Feedback from a site that isn't turned on is refused: `sendFeedback()` rejects with an error that names the site. Entries over 20,000 characters are refused too.
+
+You can use it like this:
 
 ```javascript
 // Check if the Feedback Flow API is available
